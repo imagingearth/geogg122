@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Writing and Debugging Python Code &mdash; GeogG122 v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GeogG122 v1.0 documentation" href="index.html" />
+    <link rel="next" title="7. Numerical and Scientific Python and Data Visualisation" href="pythonmodel.html" />
+    <link rel="prev" title="5. Introduction to programming in Python" href="python101.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="pythonmodel.html" title="7. Numerical and Scientific Python and Data Visualisation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="python101.html" title="5. Introduction to programming in Python"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="writing-and-debugging-python-code">
+<h1>6. Writing and Debugging Python Code<a class="headerlink" href="#writing-and-debugging-python-code" title="Permalink to this headline">¶</a></h1>
+<p>In the previous session, we typed Python commands at a prompt, i.e. we used Python interactively. We will now mostly be developing Python codes that we can re-use, so we will need to save them in a file. You can do this using your favourite texteditor (such as vi ;-)) or development environments such as <a class="reference external" href="http://docs.python.org/library/idle.html">IDLE</a> or <a class="reference external" href="http://wiki.python.org/moin/IntegratedDevelopmentEnvironments">many others</a>. If you are working on your own computer, have a look around at the different environments available and what people say about them, and choose one to use. Given the intensity of this course however, we will assume only a basic setup here, running your python code from a shell prompt in Unix and some editor for creating and editing files.</p>
+<p>It is useful to have access to a debugger when writing code. This allows you more easily track down problems that you have, but it is bad practice to develop the code in a debugger environment. As part of this coding, we will show you how to make use of a debugger to help track down problems.</p>
+<div class="section" id="in-this-session">
+<h2>6.1. In this session<a class="headerlink" href="#in-this-session" title="Permalink to this headline">¶</a></h2>
+<p>We will introduce the following new topics:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#import">import</a>] [Unix: <a class="reference internal" href="#ln">ln</a>] [<a class="reference internal" href="#pdb">pdb</a>]</div></blockquote>
+<p>we will also come across the following:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#locals">locals</a>]</div></blockquote>
+</div>
+<div class="section" id="id1">
+<h2>6.2. Writing and Debugging Python code<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p id="ln">First, lets set up a useful directory structure in your Unix environment. Type the following at the Unix prompt:</p>
+<div class="highlight-python"><pre>berlin% cd ~
+berlin% mkdir -p DATA/src/python
+berlin% ln -s ~/DATA/src ~/src
+berlin% ln -s ~/DATA/bin ~/bin
+berlin% cd src/python</pre>
+</div>
+<p>This will create a <tt class="docutils literal"><span class="pre">src</span></tt> (&#8216;source&#8217;) directory in your <tt class="docutils literal"><span class="pre">DATA</span></tt> area, with a subdirectory <tt class="docutils literal"><span class="pre">python</span></tt>. The command <tt class="docutils literal"><span class="pre">ln</span> <span class="pre">-s</span> <span class="pre">~/DATA/src</span> <span class="pre">~/src</span></tt> makes a <em>symbolic link</em> from <tt class="docutils literal"><span class="pre">~/src</span></tt> to <tt class="docutils literal"><span class="pre">~/DATA/src</span></tt> so that it will seem to you (and other users) that your <tt class="docutils literal"><span class="pre">src</span></tt> directory is in your home, rather than on the data disk (where it actually is).</p>
+<p>Let&#8217;s start with a simple piece of Python code, but first create a new directory to keep it in:</p>
+<div class="highlight-python"><pre>berlin% mkdir ~/src/python/hello
+berlin% cd  ~/src/python/hello</pre>
+</div>
+<p>The Python code, that we want to be in the directory <tt class="docutils literal"><span class="pre">~/src/python/hello</span></tt> (i.e. <tt class="docutils literal"><span class="pre">~/src/python/hello/helloWorld.py</span></tt>) is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="n">who</span> <span class="o">=</span> <span class="s">&#39;world&#39;</span>
+<span class="k">print</span> <span class="s">&#39;hello </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">who</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once you have created <em>and saved</em> the file, you can make it executable, and then run it as if it were any other Unix command:</p>
+<div class="highlight-python"><pre>berlin% chmod +x ~/src/python/hello/helloWorld.py
+berlin% ~/src/python/hello/helloWorld.py</pre>
+</div>
+<p>This should produce:</p>
+<div class="highlight-python"><pre>hello world</pre>
+</div>
+<p>and this will be for many of you your first computer program.</p>
+<p>You might check the file permissions once you have used <tt class="docutils literal"><span class="pre">chmod</span></tt>, just to check that what has happened is what you expected (hint, in case you have forgotten, use <tt class="docutils literal"><span class="pre">ls</span> <span class="pre">-l</span> <span class="pre">filename</span></tt>).</p>
+<p>Another way to &#8216;run&#8217; this program are:</p>
+<div class="highlight-python"><pre>berlin% python ~/src/python/hello/helloWorld.py</pre>
+</div>
+<p>and in fact, <a class="reference external" href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">this is what the first line of your program effectively does</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+</pre></div>
+</div>
+<p>By including this line, and making the file executable however, we do not need to explicitly run it with python at the command line. You should generally include this first &#8216;hash bang&#8217; line in your Python codes.
+One other thing to note, if you look in the directory your code is, you should see a file <tt class="docutils literal"><span class="pre">helloWorld.pyc</span></tt> which is the compiled version of the code (this is automatically done). It should run slightly faster then if you run it again, as it no longer has to compile.</p>
+<p>Next, we will show a simple example where you might use a debugger (<tt class="docutils literal"><span class="pre">pdb</span></tt>). Create the file <tt class="docutils literal"><span class="pre">helloBroken.py</span></tt>:</p>
+<div class="highlight-python"><pre>#!/usr/bin/env python
+
+whom = 'world'
+one = 1
+
+print 'hello %s, did't you know that %d + %d = %d?'%(who,one,one+one)
+</pre>
+</div>
+<p>If you run this, you will probably get the message:</p>
+<div class="highlight-python"><pre>Traceback (most recent call last):
+  File "src/python/hello/helloBroken.py", line 6
+    print 'hello %s, did't you know that %d + %d = %d?'%(who,one,one+one)
+                        ^</pre>
+</div>
+<p>Once you are used to spotting bugs (and you <em>will</em> make mistakes and create bugs), the meaning of this should be quite obvious, but for newbies at coding it can look quite complicated. One important thing to remember about tracking down and fixing bugs is to do them in order: if you fix a bug early in the code, it may make some apparent bugs later on go away. Here, we are lucky in that there is apparently only one bug. This should be easy to spot and fix. We know it is on line 6 of the code
+and the little arrow is giving us a good clue to what the problem is.</p>
+<p>Fix this bug <strong>without looking at the next stage below</strong> (only this one, in case you think you have spotted others!) and try to run again:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="n">whom</span> <span class="o">=</span> <span class="s">&#39;world&#39;</span>
+<span class="n">one</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">print</span> <span class="s">&quot;hello </span><span class="si">%s</span><span class="s">, did&#39;t you know that </span><span class="si">%d</span><span class="s"> + </span><span class="si">%d</span><span class="s"> = </span><span class="si">%d</span><span class="s">?&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">who</span><span class="p">,</span><span class="n">one</span><span class="p">,</span><span class="n">one</span><span class="o">+</span><span class="n">one</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We fixed the issue with the quote (We did it here by using <tt class="docutils literal"><span class="pre">&quot;</span></tt> to encapsulate the string, but you might have just as readilly removed the offending <tt class="docutils literal"><span class="pre">'</span></tt>), but now there is another bug. One thing to learn from this is, especially when you start coding, is to only write small sections of code, <strong>then to test them</strong>. Working out <em>how</em> to test a piece of code is a skill that will develop over time.</p>
+<p>The bug now then is quite a simple one:</p>
+<div class="highlight-python"><pre>Traceback (most recent call last):
+  File "src/python/helloBroken.py", line 6, in &lt;module&gt;
+    print "hello %s, did't you know that %d + %d = %d?"%(who,one,one+one)
+NameError: name 'who' is not defined</pre>
+</div>
+<p id="pdb">It&#8217;s clearly still on line 6, and it concerns the variable <tt class="docutils literal"><span class="pre">who</span></tt>. We might just be able to look at the code and spot what the problem here is, but sometimes it is more difficult to see. This might be a case to invoke a debugger. The question we want to ask is &#8216;why isn&#8217;t this variable I want to use <tt class="docutils literal"><span class="pre">who</span></tt> defined?`. We can do this by importing and using the debugger package:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<span class="n">whom</span> <span class="o">=</span> <span class="s">&#39;world&#39;</span>
+<span class="n">one</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;hello </span><span class="si">%s</span><span class="s">, did&#39;t you know that </span><span class="si">%d</span><span class="s"> + </span><span class="si">%d</span><span class="s"> = </span><span class="si">%d</span><span class="s">?&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">who</span><span class="p">,</span><span class="n">one</span><span class="p">,</span><span class="n">one</span><span class="o">+</span><span class="n">one</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="import">The line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pdb</span>
+</pre></div>
+</div>
+<p>imports the <tt class="docutils literal"><span class="pre">pdb</span></tt> package, then we refer to a method set_trace() in this package by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>We have places the &#8216;trace point&#8217; just before where we know the bug is, so that we can investigate what is going on. Now when we run, we get a <tt class="docutils literal"><span class="pre">(pdb)</span></tt> prompt:</p>
+<div class="highlight-python"><pre>&gt; /home/plewis/src/python/helloBroken.py(8)&lt;module&gt;()
+-&gt; print "hello %s, did't you know that %d + %d = %d?"%(who,one,one+one)
+(Pbd)</pre>
+</div>
+<p>We can now run various commands within <tt class="docutils literal"><span class="pre">pdb</span></tt> to try to work out the problem. Typical ones are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">b</span></tt> : set a breakpoint</li>
+<li><tt class="docutils literal"><span class="pre">c</span></tt> : continue (to next breakpoint)</li>
+<li><tt class="docutils literal"><span class="pre">n</span></tt> : next line</li>
+<li><tt class="docutils literal"><span class="pre">s</span></tt> : step (into module)</li>
+<li><tt class="docutils literal"><span class="pre">p</span></tt> : print (e.g. <tt class="docutils literal"><span class="pre">p</span> <span class="pre">who</span></tt>)</li>
+<li><tt class="docutils literal"><span class="pre">u</span></tt> : up (one level)</li>
+<li><tt class="docutils literal"><span class="pre">d</span></tt> : down (one level)</li>
+<li><tt class="docutils literal"><span class="pre">l</span></tt> : list (or <tt class="docutils literal"><span class="pre">l</span> <span class="pre">1</span></tt> to list lines atrting at 1)</li>
+<li><tt class="docutils literal"><span class="pre">?</span></tt> : help</li>
+<li><tt class="docutils literal"><span class="pre">h</span></tt> : help</li>
+</ul>
+<p>In this case, we might try:</p>
+<div class="highlight-python"><pre>(Pbd) p who
+*** NameError: NameError("name 'who' is not defined",)</pre>
+</div>
+<p>but that doesn&#8217;t actually take us much further than the original error message:: <tt class="docutils literal"><span class="pre">who</span></tt> is simply not defined. So, we need to see why. It would be useful to list the code at this point:</p>
+<div class="highlight-python"><pre>(Pdb) l 1
+  1         #!/usr/bin/env python
+  2         import pdb
+  3
+  4         whom = 'world'
+  5         one = 1
+  6
+  7         pdb.set_trace()
+  8  -&gt;     print "hello %s, did't you know that %d + %d = %d?"%(who,one,one+one)
+[EOF]
+(Pbd)</pre>
+</div>
+<p id="locals">from which is <em>should</em> be obvious, but we still might not see it. From <tt class="docutils literal"><span class="pre">pdb</span></tt> we can type and run any Python commands to help us. In this case, we might find <a class="reference external" href="http://docs.python.org/library/functions.html#locals">locals()</a>  quite helpful:</p>
+<div class="highlight-python"><pre>(Pdb) locals().keys()
+['one', '__builtins__', '__file__', '__doc__', 'whom', '__name__', '__package__', 'pdb']</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">locals</span></tt> returns a dictionary of local variables that <em>are</em> defined, and <tt class="docutils literal"><span class="pre">locals().keys()</span></tt> tells us the &#8216;names&#8217; (the &#8216;keys&#8217;) of these variables. We see a number of terms starting and ending with <tt class="docutils literal"><span class="pre">__</span></tt> (e.g. <tt class="docutils literal"><span class="pre">'__doc__'</span></tt>) that we do not need to be concerned with yet, but we also see that the only other variables defined are: <tt class="docutils literal"><span class="pre">'one'</span></tt>, <tt class="docutils literal"><span class="pre">'whom'</span></tt> and <tt class="docutils literal"><span class="pre">'pdb'</span></tt>. It should be clear to us know that we have mistakenly assigned the variable <tt class="docutils literal"><span class="pre">whom</span></tt> when we meant <tt class="docutils literal"><span class="pre">who</span></tt> (or <em>vice-versa</em>, if you like). You can quit the debugger now and edit the file. The problem happened on line 4 of the code, and is easy to fix:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<span class="n">who</span> <span class="o">=</span> <span class="s">&#39;world&#39;</span>
+<span class="n">one</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;hello </span><span class="si">%s</span><span class="s">, did&#39;t you know that </span><span class="si">%d</span><span class="s"> + </span><span class="si">%d</span><span class="s"> = </span><span class="si">%d</span><span class="s">?&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">who</span><span class="p">,</span><span class="n">one</span><span class="p">,</span><span class="n">one</span><span class="o">+</span><span class="n">one</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If we leave the trace point in, we again stop at line 8 of the code. We could step over that line with:</p>
+<div class="highlight-python"><pre>(Pbd) n
+TypeError: 'not enough arguments for format string'</pre>
+</div>
+<p>but we see one more error: <tt class="docutils literal"><span class="pre">'not</span> <span class="pre">enough</span> <span class="pre">arguments</span> <span class="pre">for</span> <span class="pre">format</span> <span class="pre">string'</span></tt>. That should quite easy to spot and fix. If you think you know the correct line here, you can try it out at the debugger:</p>
+<div class="highlight-python"><pre>(Pbd) print "hello %s, did't you know that %d + %d = %d?"%(who,one,one,one+one)
+hello world, did't you know that 1 + 1 = 2?</pre>
+</div>
+<p>so we can now go back and fix that line in the code file, and run the whole thing (finally).</p>
+<p>The errors here should not have been hard to track down, but they can be in a large piece of code, and sometimes the errors can be quite subtle. There is definitely a skill to coding, and you will (hopefully) get better with practice, but for the moment, just try to remember to:</p>
+<ul class="simple">
+<li>plan the code before you start writing, breaking some big &#8216;problem&#8217; down into small achievable chunks</li>
+<li>make the code as clear and simple as you can, using appropriate library functions rather than continuously re-inventing the wheel</li>
+<li>write it in small increments, and keep testing the code.</li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2>6.3. Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>In this session, we have introduced the concept of writing Python code in a file, rather than interactively, and shown some ideas on how to track down problems in the code you develop (debugging).</p>
+<p>We have covered the following new topics:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#import">import</a>] [Unix: <a class="reference internal" href="#ln">ln</a>] [<a class="reference internal" href="#pdb">pdb</a>]</div></blockquote>
+<p>we have also come across the following:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#locals">locals</a>]</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. Writing and Debugging Python Code</a><ul>
+<li><a class="reference internal" href="#in-this-session">6.1. In this session</a></li>
+<li><a class="reference internal" href="#id1">6.2. Writing and Debugging Python code</a></li>
+<li><a class="reference internal" href="#summary">6.3. Summary</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="python101.html"
+                        title="previous chapter">5. Introduction to programming in Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pythonmodel.html"
+                        title="next chapter">7. Numerical and Scientific Python and  Data Visualisation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/python102.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="pythonmodel.html" title="7. Numerical and Scientific Python and Data Visualisation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="python101.html" title="5. Introduction to programming in Python"
+             >previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Prof. P. Lewis, Prof. J. French.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

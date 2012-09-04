@@ -1,0 +1,42 @@
+Numerical and Scientific Python and  Data Visualisation
+=======================================================
+
+We have previously seen some of the main examples of the core data types in Python: `strings <python101.html?highlight=string#strings>`_ for text, `integer <python101.html?highlight=integer#integer>`_ and `float <python101.html?highlight=float#float>`_ for numerical representation; `boolean <python101.html?highlight=boolean#boolean>`_ for logical representation; and `dictionaries <python101.html?highlight=dict#dict>`_ and `lists <python101.html?highlight=list#lists>`_ as ways of grouping sets of (potentially different) data types together.
+
+Very often in scientific programming, we wish to perform operations on sets containing the same data type, for instance vectors or matrices of floating point numbers. Of course we can use dictionaries or lists to do this, but they lack some of the general functionality we would normally need. The main package in Python for dealing with numerical manipulation then, is `numpy <http://numpy.scipy.org/>`_ which is often used together with `scipy <http://www.scipy.org/>`_. There are many resources built around these packages, and many tutorials available, such as `the one from scipy for numpy <http://www.scipy.org/Tentative_NumPy_Tutorial>`_ and the `scipy cookbook <http://www.scipy.org/Cookbook>`_.
+A complete course in `Scientific Python <http://scipy-lectures.github.com/index.html>`_ is also available. It is up to you to make use of these various resources to back up what we cover in these classes, for further learning, and for general reference.
+
+We strongly recommend that you go through some of these in your own time. At the very least, be aware that there are such resources to help you develop what you can do with these (and other) packages. 
+
+Tools to enable you to visualise data are available in a number of packages, but one of the most common ones is `matplotlib <http://matplotlib.sourceforge.net/>`_ or the slightly different philosophy of `pylab <http://www.scipy.org/PyLab>`_. These have very good help pages, but to start with, you might find the `gallery of different examples <http://matplotlib.sourceforge.net/gallery.html>`_ most useful.
+
+Anyone who has come across matlab before will notice a good deal of similarity between matplotlib (and indeed, elements of numpy) and matlab. Some of the advantages of using the Python packages over matlab are `given here <http://en.wikipedia.org/wiki/Matplotlib#Comparison_with_MATLAB>`_ but `there is much debate around these things <http://brenocon.com/blog/2009/02/comparison-of-data-analysis-packages-r-matlab-scipy-excel-sas-spss-stata/>`_ and of course there are many tools developed around matlab that you may wish to use at some point. One key advantage of the Python packages over matlab for many users is that it is open source, but another viable open source toolset for many of the things we will do here is `R <http://www.r-project.org/>`_. Rather than attempting to 'teach' you all of these tools and packages, it is preferable that we settle on one main one (Python and its packages here) and provide you pointers to how you might use what you learn here in other languages/tools. On the subject of R, we note here that there is a Python interface to R called `RPy <http://rpy.sourceforge.net/>`_.
+
+To help appreciate some of the similarities and differences, and to help you transliterate between one language and another, there are several web resources that you might find useful, including `NumPy for Matlab Users <http://www.scipy.org/NumPy_for_Matlab_Users>`_, A 'crib sheet' covering basic equivalences between matlab/octave, python and R is `available as a pdf <http://www.google.co.uk/url?sa=t&source=web&cd=3&ved=0CDcQFjAC&url=http%3A%2F%2Fmathesaurus.sourceforge.net%2Fmatlab-python-xref.pdf&rct=j&q=matlab%20python&ei=Jft6TvPXM9Ka1AWm1b2jAw&usg=AFQjCNGmSeFre2HxLxev8ZX1DCfBeXgRSQ&sig2=-ysrvcJGr4ogqQDjlb7PLA&cad=rja>`_ , or a more general 'Mathesaurus' provided `here <http://mathesaurus.sourceforge.net/>`_.
+
+An additional piece of software to consider and keep an eye on as it develops is `sage <http://sage.math.washington.edu/sage/>`_ which is a general open source mathematics software, with a Python-based interface.
+
+In this session
+---------------
+
+In this session then, we will *not* attempt to take you through all of the features of scipy, numpy and matplotlib. Instead, we will develop some examples where we build simple environmental models that you can use. 
+
+We will introduce the following new topics:
+
+
+we will also come across the following:
+
+A Simple bit of Image Processing
+--------------------------------
+
+All of the above is, in one sense just context. What you *want* to be able to do is get on and write some useful code so that you can explore some interesting data or model. With that in mind, we will now develop some code for a simple environmental model.
+
+We will start however with some image processing. For the model we build later, we will want to have a representation of a Digital Elevation model (a DEM) and have the ability to: (i) smooth it; (ii) find the slope. We also want to be able to generate a random DEM (for testing it), so lets start there.
+
+We can generate a random DEM by simply generating a 2D array of random numbers using numpy, and correlating this random field with a smoothing filter. Lets generate the random array first:
+
+Summary
+-------
+
+In this session, we have seen some examples of developing environmental models in Python, making use of numpy, scipy and matplotlib. As we stated in the introduction, these notes are not supposed to provide exhaustive coverage of what you can do with those packages, but rather to take you through a few relevant examples. You should make use of the plethora of examples and help pages available on the web for developing your own codes.
+

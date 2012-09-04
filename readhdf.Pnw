@@ -1,0 +1,241 @@
+Read and use some different file formats
+========================================
+
+In this session, we will learn to use some geospatial tools using `GDAL <http://gdal.osgeo.org/>`_ in Python. A good set of `working notes on how to use GDAL <http://jgomezdans.github.com/gdal_notes/>`_ has been developed that you will find useful for background reading.
+
+  [`readhdf`_]
+
+.. _readhdf:
+
+Read an HDF file (e.g. MODIS data products)
+-------------------------------------------
+
+`HDF <http://www.hdfgroup.org/HDF-FAQ.html>`_ (Hierarchical Data Format) and `HDF-EOS <http://hdfeos.org/>`_ are common formats for EO data so you need to have some idea how to use and manipulate them.
+
+A hierarchical data format is essentially a format that 'packs' together various aspects of a dataset (metadata, raster data etc.) into a binary file. There are many tools for manipulating and reading HDF in python, but we will use one of the more generic tools, `gdal <http://www.gdal.org/>`_ here.
+
+When using HDF files, we need to have some idea of the stucture of the contents, although you can clearly explore that yourself in an interactive session. MODIS products have extensive information available to help you interpret the datasets, for example the MODIS LAI/fAPAR product `MOD15A2 <https://lpdaac.usgs.gov/products/modis_products_table/leaf_area_index_fraction_of_photosynthetically_active_radiation/8_day_l4_global_1km/mod15a2>`_. We will use this as an example to explore a dataset.
+
+You will need access to the file `MCD15A2.A2011185.h09v05.005.2011213154534.hdf <_images/MCD15A2.A2011185.h09v05.005.2011213154534.hdf>`_, which you might access by `ftp <http://www2.geog.ucl.ac.uk/~plewis/geogg122/modisftp.html>`_.
+
+Before going into the Python coding for GDAL, it is worthwhile looking over some of the `tools that are provided with GDAL <http://jgomezdans.github.com/gdal_notes/intro.html>`_. In particular::
+
+
+    berlin% gdalinfo MCD15A2.A2011185.h09v05.005.2011213154534.hdf
+    ...
+    NORTHBOUNDINGCOORDINATE=39.9999999964079
+    SOUTHBOUNDINGCOORDINATE=29.9999999973059
+    EASTBOUNDINGCOORDINATE=-92.3664205550513
+    WESTBOUNDINGCOORDINATE=-117.486656023174
+    ...
+
+We can check this against e.g. `the UNH MODIS tile calculator <http://remotesensing.unh.edu/modis/modis.shtml>`_, just to confirm that we have interpreted the coordinates correctly.
+
+We can apply other shell GDAL tools, e.g. to perform a reprojection::
+
+
+    berlin% gdalwarp -of GTiff -t_srs "ESRI::/data/geospatial_20/plewis/geogg122/source/practical/huc250k_shp/huc250k.prj" \
+	-tr 1000 1000 'HDF4_EOS:EOS_GRID:/data/geospatial_20/plewis/geogg122/source/MCD15A2.A2011185.h09v05.005.2011213154534.hdf:MOD_Grid_MOD15A2:Lai_1km' output_file.tif
+
+
+where ``/data/geospatial_20/plewis/geogg122/source/MCD15A2.A2011185.h09v05.005.2011213154534.hdf`` is the name of the input HDF file, ``MOD_Grid_MOD15A2:Lai_1km`` is the data product we want, and ``/data/geospatial_20/plewis/geogg122/source/practical/huc250k_shp/huc250k.prj`` is an ESRI prj format file, specifying the projection information we want. The option ``[-tr xres yres]`` specifies the desired resolution of the output dataset. ``[-of GTiff]`` specifies GeoTiff for the output format.
+
+
+Having some idea what information is in the hdf file then, we can proceed to raed the data in inside Python.
+
+<<>>=
+#!/usr/bin/env python
+
+import gdal
+import gdalnumeric
+
+filename = 'MCD15A2.A2011185.h09v05.005.2011213154534.hdf'
+
+ds = gdal.Open(filename)
+sds_md = ds.GetMetadata('SUBDATASETS')
+
+print 'keys'
+for i in sds_md.iterkeys():
+    print i,sds_md[i]
+@
+
+By reference to the `MODIS LAI/fAPAR product page <https://lpdaac.usgs.gov/products/modis_products_table/leaf_area_index_fraction_of_photosynthetically_active_radiation/8_day_l4_global_1km/mod15a2>`_, we can see that if the product we want is ``Lai_1km``, the data layers that we need access to are ``SUBDATASET_2``, ``SUBDATASET_6`` and ``SUBDATASET_3`` and ``SUBDATASET_4``.
+
+<<>>=
+
+datakeys = {}
+datasets = ['SUBDATASET_2','SUBDATASET_3','SUBDATASET_3','SUBDATASET_4']
+datanames = ['Lai_1km','LaiStdDev_1km','FparLai_QC','FparExtra_QC']
+for (j,i) in enumerate(datasets):
+    this = {}
+    this['name'] = sds_md[i + '_NAME']
+    this['description'] = sds_md[i + '_DESC']
+    this['data'] = gdalnumeric.LoadFile(this['name'])
+    datakeys[datanames[j]] = this.copy()
+@
+
+This will read the data and metadata into an appropriate dictionary. Note the use of ``enumerate`` in the ``for`` loop. This sets the variable ``j`` to an index and the variable ``i`` to each value of ``datasets`` in turn in the loop. We then use the index ``j`` to translate the rather awkward ``datasets`` reference to a more readable one in ``datanames``.
+
+We can now refer to the LAI dataset as e.g. ``datakeys['Lai_1km']['data']``.
+
+<<>>=
+print datakeys['Lai_1km']['data']
+@
+
+Now we have to translate the LAI values into meaningful quantities. According to the `LAI <https://lpdaac.usgs.gov/products/modis_products_table/leaf_area_index_fraction_of_photosynthetically_active_radiation/8_day_l4_global_1km/mod15a2>`_ webpage, there is a scale factor of 0.1 involved for LAI and SD LAI:
+
+<<>>=
+lai = datakeys['Lai_1km']['data'] * 0.1
+lai_sd = datakeys['LaiStdDev_1km']['data'] * 0.1
+@
+
+We can now look at LAI:
+
+<<>>=
+print lai
+@
+
+and the SD:
+
+<<>>=
+print lai_sd
+@
+
+Some SD values are clearly given as 0.0, which is unlikely to be true. We should then examine the QC (Quality Control) information. The codes for this are also given on the `LAI product page <https://lpdaac.usgs.gov/products/modis_products_table/leaf_area_index_fraction_of_photosynthetically_active_radiation/8_day_l4_global_1km/mod15a2>`_. 
+They are described as bit combinations:
+
+.. csv-table::
+    :header: "Bit No.","Parameter Name","Bit Comb."
+
+
+    0,MODLAND_QC bits,0,Good quality (main algorithm with or without saturation) 
+     ,               ,1,Other Quality (back-up algorithm or fill values) 
+    1,Sensor         ,0,Terra 
+     ,               ,1,Aqua 
+    2,DeadDetector   ,0,Detectors apparently fine for up to 50% of channels 1,2 
+     ,               ,1,Dead detectors caused >50% adjacent detector retrieval 
+    3-4,CloudState   ,00,0 Significant clouds NOT present (clear) 
+       ,             ,01,1 Significant clouds WERE present 
+       ,             ,10,2 Mixed cloud present on pixel 
+       ,             ,11,3 Cloud state not defined, assumed clear 
+    5-7,CF_QC        ,000,0 Main (RT) method used, best result possible (no saturation) 
+       ,             ,001,1 Main (RT) method used with saturation. Good,very usable 
+       ,             ,010,2 Main (RT) method failed due to bad geometry, empirical algorithm used   
+       ,             ,011,3 Main (RT) method failed due to problems other than geometry, empirical algorithm used 
+       ,             ,100,4 Pixel not produced at all, value coudn't be retrieved (possible reasons: bad L1B data, unusable MODAGAGG data) 
+
+
+In using this information, it is up to the use which data he/she wants to pass through for any further processing. There are clearly trade-offs: if you look for only the highest quality data, then the number of samples is likely to be lower than if you were more tolerant. But if you are too tolerant, you will get spurious results.
+
+Let us suggest here that we want only the highest quality data. This implies 00000000 and 00000010 for FparLai_QC (0 and 2, respectively):
+
+<<fig = True>>=
+import numpy as np
+
+qc = datakeys['FparLai_QC']['data']
+mask = np.zeros_like(lai).astype(bool)
+okvalues = [0,2]
+for i in okvalues:
+    mask[np.where(qc == i)] = True
+
+import pylab as plt
+fig = plt.figure()
+ax = fig.add_subplot(111)
+cax = ax.imshow(mask, interpolation='nearest')
+cbar = fig.colorbar(cax, ticks=[0,1])
+ax.set_title('Data mask')
+plt.show()
+
+@
+
+We can use this mask to e.g. set invalid LAI values to 0 and show the data:
+
+<<fig = True>>=
+fig = plt.figure()
+ax = fig.add_subplot(111)
+nlai = lai.copy()
+nlai[True - mask] = 0.0
+cax = ax.imshow(nlai, interpolation='nearest')
+cbar = fig.colorbar(cax)
+ax.set_title('LAI data')
+plt.show()
+@
+
+
+<<fig = True>>=
+fig = plt.figure()
+ax = fig.add_subplot(111)
+nlai_sd = lai_sd.copy()
+nlai_sd[True - mask] = 0.0
+cax = ax.imshow(nlai_sd, interpolation='nearest')
+cbar = fig.colorbar(cax)
+ax.set_title('LAI SD data')
+plt.show()
+
+@
+
+
+Exercise 1
+----------
+For the moment, we will suppose this data masking to be sufficient. However, closer inspection of the `product data page <https://lpdaac.usgs.gov/products/modis_products_table/leaf_area_index_fraction_of_photosynthetically_active_radiation/8_day_l4_global_1km/mod15a2>`_ would show us that the data can take on various **Fill Values** which any data user should check for. 
+
+Modify the code we have developed above to also check that the data are not unwanted 'fill values' and use this to modify the data mask.
+
+**Hint** Note that these fill values are applied to ``Lai_1km``, not the QC information, so you have to check values in that dataset and modify the mask accordingly.
+
+Exercise 2
+----------
+
+We also have access to FparExtra_QC:
+
+<<>>=
+qc1  = datakeys['FparExtra_QC']['data']
+@
+
+The data values in ``FparExtra_QC`` are:
+
+.. csv-table::
+    :header: "Bit No.","Parameter Name","Bit Comb."
+
+
+    0-1,LandSea,00,Land
+       ,       ,01,Shore
+       ,       ,10,Freshwater
+       ,       ,11,Ocean
+    2  ,Snow/Ice ,0,No snow/ice detected
+       ,         ,1,snow/ice detected
+    3  , Aerosol ,0,No or low atmospheric aerosol levels detected
+       ,         ,1,Average or high atmospheric aerosol levels detected
+    4  , Cirrus, 0, No cirrus detected
+       ,       , 1, cirrus detected
+    5  , Cloud , 0, No clouds
+       ,       , 1, clouds
+    6  , Cloud Shadow, 0, No cloud shadow detected
+       ,             , 1, cloud shadow detected
+    7  , Biome_Mask , 0, Biome outside interval <1,4>
+       ,            , 1, Biome in interval <1,4>
+
+
+
+Use this QC dataset to make sure that *only* Land pixels are passed in the mask, and apply other data quality measures as appropriate.
+
+**Hint** this is much the same as the exercise above, but looking at a different QC dataset. The key to doing this is to identify the bit codes for combinations that you want to set or unset.
+
+You can find an `example of how to do this here <http://www2.geog.ucl.ac.uk/~plewis/geogg122/python/qc.py>`_. This filtering shouldn't make much difference in this case, as the tile is mostly land pixels.
+
+Try downloading the tile h17v03 e.g. for month 6::
+
+
+
+    berlin% modisAlbedoftp.py -v -p 'MODIS_Composites/MOTA/MCD15A2' -t h17v03
+
+
+
+and using e.g. ``MCD15A2.A2011185.h17v03.005.2011213154608.hdf``.
+
+<<fig=True,term=True>>=
+from qc import *
+@
+
+
+

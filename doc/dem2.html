@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9. Improving and extending the DEM code &mdash; GeogG122 v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GeogG122 v1.0 documentation" href="index.html" />
+    <link rel="next" title="10. Help and related Material" href="helper.html" />
+    <link rel="prev" title="8. Random Digital Elevation Model" href="dem1.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="helper.html" title="10. Help and related Material"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dem1.html" title="8. Random Digital Elevation Model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="improving-and-extending-the-dem-code">
+<h1>9. Improving and extending the DEM code<a class="headerlink" href="#improving-and-extending-the-dem-code" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we will tidy up the DEM generation code, grouping items into functions.</p>
+<div class="section" id="introduction">
+<h2>9.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Whilst the previous version of the code we generated was ok and worked, its a very ugly and poorly organised. ne way to take this would be to group together some of the parts that &#8216;go together&#8217; functionally into methods. This is quite easy to achieve:, first by defining a set of fu
+nctions or methods. This could be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">gaussianFilter</span><span class="p">(</span><span class="n">sizex</span><span class="p">,</span><span class="n">sizey</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.333</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generate and return a 2D Gaussian function</span>
+<span class="sd">    of dimensions (sizex,sizey)</span>
+
+<span class="sd">    If sizey is not set, it defaults to sizex</span>
+<span class="sd">    A scale can be defined to widen the function (default = 0.333)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">sizey</span> <span class="o">=</span> <span class="n">sizey</span> <span class="ow">or</span> <span class="n">sizex</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="o">-</span><span class="n">sizex</span><span class="p">:</span><span class="n">sizex</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">sizey</span><span class="p">:</span><span class="n">sizey</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">scale</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sizex</span><span class="p">)</span><span class="o">+</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sizey</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">g</span><span class="o">/</span><span class="n">g</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">randomDEM</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span><span class="n">sizex</span><span class="p">,</span><span class="nb">max</span><span class="p">,</span><span class="nb">min</span><span class="p">,</span><span class="n">sizey</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">ny</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generate a pseudo-DEM from random correlated noise.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        nx    :       number of pixels of the output</span>
+<span class="sd">      sizex   :       number of pixels of the smoothing filter</span>
+<span class="sd">      max     :       max height in DEM</span>
+<span class="sd">      min     :       min height in DEM</span>
+
+<span class="sd">    Options:</span>
+<span class="sd">      sizey   :       defaults to sizex</span>
+<span class="sd">      ny      :       defaults to nx</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">ny</span> <span class="ow">or</span> <span class="n">nx</span>
+    <span class="n">sizey</span> <span class="o">=</span> <span class="n">sizey</span> <span class="ow">or</span> <span class="n">sizex</span>
+    <span class="n">dem1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">sizex</span><span class="p">,</span><span class="n">ny</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">sizey</span><span class="p">)</span>
+    <span class="n">demSmooth</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">dem1</span><span class="p">,</span><span class="n">gaussianFilter</span><span class="p">(</span><span class="n">sizex</span><span class="p">,</span><span class="n">sizey</span><span class="p">),</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;valid&#39;</span><span class="p">)</span>
+    <span class="n">demSmooth</span> <span class="o">=</span> <span class="p">(</span><span class="n">demSmooth</span> <span class="o">-</span> <span class="n">demSmooth</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">demSmooth</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">demSmooth</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="n">demSmooth</span> <span class="o">=</span> <span class="n">demSmooth</span><span class="o">*</span><span class="p">(</span><span class="nb">max</span><span class="o">-</span><span class="nb">min</span><span class="p">)</span><span class="o">+</span><span class="nb">min</span>
+    <span class="k">return</span> <span class="n">demSmooth</span>
+
+<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="nb">file</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Produce a plot of the 2D array</span>
+
+<span class="sd">    Options:</span>
+<span class="sd">      file    :       specify an output file</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">interpolation</span><span class="o">=</span><span class="s">&#39;nearest&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">file</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefile</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This groups the jobs we have done in the previous exercise into three main functions, involving generating a Gaussian function in an array, generating the random DEM, and plotting. If we had properly planned what we were going to do, we would have identified these three functions as the core building blocks of our code. We would also have noted that generating the random DEM needs access to the Gaussian generating function. We have now included some comment text for each of these, so that we will remember what the functions do and how to use them (and other people looking at the code will know as well). We have also added some basic options to the functions, so that we can take sensible defaults if we wish.</p>
+<p>We can now run the sequence:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">smoothDEM</span> <span class="o">=</span> <span class="n">randomDEM</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mf">100.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="n">sizey</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">smoothDEM</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem2Fig1.png" src="_images/dem2Fig1.png" style="width: 15cm;" />
+<p class="caption">Figure 1. Random DEM</p>
+</div>
+<p>There are a few features to note about this new code. First, we notice that we define functions/,methods with a line starting <tt class="docutils literal"><span class="pre">def</span></tt> and ending with <tt class="docutils literal"><span class="pre">:</span></tt>. All code that belongs in that method is then indented (this makes it &#8216;neat&#8217; but it also a requirement of Python). We will generally write some text on the purpose and inputs/outputs of the method (in between <tt class="docutils literal"><span class="pre">'''</span></tt> over multiple lines if we wish).  We can also note the mechanism for optional arguments to the method (e.g. <tt class="docutils literal"><span class="pre">sizey=None</span></tt>).</p>
+<p>Other than that, the code is very similar to what we previously wrote. One point of interest is the use of the logical statement <tt class="docutils literal"><span class="pre">or</span></tt>. Consider:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">gaussianFilter</span><span class="p">(</span><span class="n">sizex</span><span class="p">,</span><span class="n">sizey</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.333</span><span class="p">):</span>
+    <span class="n">sizey</span> <span class="o">=</span> <span class="n">sizey</span> <span class="ow">or</span> <span class="n">sizex</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">sizex</span></tt> here is required, so will always be set. <tt class="docutils literal"><span class="pre">sizey</span></tt> takes a default value of <tt class="xref docutils literal"><span class="pre">None</span></tt>. If we don&#8217;t set <tt class="docutils literal"><span class="pre">sizey</span></tt> it will be <tt class="xref docutils literal"><span class="pre">None</span></tt> then, and we can verify that:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="bp">None</span> <span class="ow">or</span> <span class="s">&#39;something else&#39;</span>
+<span class="go">&#39;something else&#39;</span>
+</pre></div>
+</div>
+<p>If however we do set <tt class="docutils literal"><span class="pre">sizey</span></tt>, e.g. to <tt class="docutils literal"><span class="pre">10</span></tt> then:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;10 or &#39;something else&#39;</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+<p>The mechanism would have worked the same if we had set the default value of <tt class="docutils literal"><span class="pre">sizey</span></tt> to <tt class="docutils literal"><span class="pre">false</span></tt> but you can check that for yourself.</p>
+</div>
+<div class="section" id="raindrops-keep-falling-on-my-dem">
+<h2>9.2. Raindrops keep falling on my DEM<a class="headerlink" href="#raindrops-keep-falling-on-my-dem" title="Permalink to this headline">¶</a></h2>
+<p>Now we have a few useful functions (that we might choose to re-use elsewhere) we can define some more operations fo
+r our DEM. One might be a simple raindrop code which is one way we can define watersheds from a DEM. You will find
+implementations of this in most GIS packages, but its a simple enough code to develop, quite fun to write, and we can demonstrate a few new things in scientific Python.</p>
+<p>The main idea of a raindrop program is to suppose that a raindrop falls on a cell of the DEM, to suppose that it flows downhill (obviously you could account for other effects if you wanted to) and to produce a map of where it ends up. This will give us a drainage network.</p>
+<div class="section" id="differentiation">
+<h3>9.2.1. differentiation<a class="headerlink" href="#differentiation" title="Permalink to this headline">¶</a></h3>
+<p>The first thing we should recognise is that each cell needs to know which direction downhill will be. We can apply this deterministically (just follow the steepest slope) or stochastically (randonly sample all downhill slopes). This obviously needs us to know the local gradient (slope and aspect) which we do with convolution as above:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">grad2d</span><span class="p">(</span><span class="n">dem</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate the slope and gradient of a DEM</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="n">gaussianFilter</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">dem</span><span class="p">,</span><span class="n">f0</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;valid&#39;</span><span class="p">)</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">f1</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;valid&#39;</span><span class="p">)</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">f2</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;valid&#39;</span><span class="p">)</span>
+    <span class="n">slope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">g1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">g2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">aspect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">g2</span><span class="p">,</span><span class="n">g1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">slope</span><span class="p">,</span> <span class="n">aspect</span>
+</pre></div>
+</div>
+<p>We can run this and plot the slope:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">slope</span><span class="p">,</span>  <span class="n">aspect</span> <span class="o">=</span> <span class="n">grad2d</span><span class="p">(</span><span class="n">smoothDEM</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem2Fig2.png" src="_images/dem2Fig2.png" style="width: 15cm;" />
+<p class="caption">Figure 2. Slope</p>
+</div>
+<p>and aspect:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">aspect</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem2Fig3.png" src="_images/dem2Fig3.png" style="width: 15cm;" />
+<p class="caption">Figure 3. Aspect</p>
+</div>
+<p>Some new features here:</p>
+<ul class="simple">
+<li>we have returned two arrays from the function (<tt class="docutils literal"><span class="pre">slope,</span> <span class="pre">aspect</span></tt>). This is done using a comma separated list.</li>
+<li>we set up the simple <a class="reference external" href="http://en.wikipedia.org/wiki/Sobel_operator">Sobel</a> filters &#8216;by hand&#8217; as they are simple (<tt class="docutils literal"><span class="pre">[[-1,0,1],[-2,0,2],[-1,0,1]]</span></tt>) in a list.</li>
+<li>we then converted this list to a numpy array using <tt class="docutils literal"><span class="pre">np.array</span></tt>.</li>
+<li>rather than having to define the second filter <tt class="docutils literal"><span class="pre">f2</span></tt> by hand, we generate it as the <a class="reference external" href="http://mathworld.wolfram.com/Transpose.html">transpose</a> of <tt class="docutils literal"><span class="pre">f1</span></tt> using <tt class="docutils literal"><span class="pre">np.transpose()</span></tt>.</li>
+<li>we make use of several other numpy methods that we would expect to find (<tt class="docutils literal"><span class="pre">np.sqrt()</span></tt> and <tt class="docutils literal"><span class="pre">np.arctan2()</span></tt>) in a numerical library/package.</li>
+</ul>
+</div>
+<div class="section" id="raindrops-on-roses-pseudocode">
+<h3>9.2.2. raindrops on roses: pseudocode<a class="headerlink" href="#raindrops-on-roses-pseudocode" title="Permalink to this headline">¶</a></h3>
+<p>Optimisation should never be your primary concern when developing a piece of code, but if you know you can think of some clever, clear, and robust way of doing something that you know would otherwise be very slow, it might be worth an attempt. Generally, especially when you are starting coding, keep it simple.
+If you really want to optimise, do that <em>once</em> you&#8217;ve got <em>everything</em> working.</p>
+<p>So, the simplest way of doing this would be to consider a single raindrop at a time and follow its fate.</p>
+<p>We can start to develop some <a class="reference external" href="http://en.wikipedia.org/wiki/Pseudocode">pseudocode</a> to do this. This allows us to write the algorithm we want to implement in a structured way, akin to plain english. This should really be
+independent of any computer language, as its the <em>algorithm</em> we are trying to define, but when you are working in a high level language such as Python, you might use elements of the language (once you are familiar with them). You might like to read some <a class="reference external" href="http://www.cs.cornell.edu/Courses/cs482/2003su/handouts/pseudocode.pdf">guidelines</a> on this, but you will find plenty of other general examples on the <a class="reference external" href="http://www.google.co.uk/search?q=pseudocode&amp;ie=utf-8&amp;oe=utf-8&amp;aq=t&amp;rls=org.mozilla:en-US:official&amp;client=firefox-a">web</a>.</p>
+<p>A good idea is to start from some idea of what <em>output</em> we want, then think about what <em>inputs</em> we need for this (we can refine this as our ideas develop if needs be) and then decide on the processes we need to go through to go from the inputs to the output.</p>
+<p>Here, the <em>output</em> for our single raindrop is the grid cell it will end up in. We might also like to keep track of the cells we go through, and perhaps the total travel distance involved.</p>
+<p>The <em>inputs</em> we will need obviously include the DEM, and we might suspect that we need the local slope and aspect as well. The core of the algorithm is clearly going to be based around a choice of which cell we move to from the current cell. Everything else should just be iteratively applying this &#8216;move&#8217;. Part of this &#8216;move&#8217; will obviously also be a termination criterion, where we decide not to move any further. We can foresee that we might have to think about what happens to raindrops that fall off the edge of the DEM. These are all just &#8216;concepts&#8217; we can form from thinking about and trying to visualise the problem, before we even start writing pseudocode.
+Even if the final place we want to end up is e.g. delineation of catchments, we are making sure our focus is on a particular, solveable, part of the problem, rather than trying to work out every detail of everything from the outset. This is key for coding: break the problem down into a hierarchy of problems.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9. Improving and extending the DEM code</a><ul>
+<li><a class="reference internal" href="#introduction">9.1. Introduction</a></li>
+<li><a class="reference internal" href="#raindrops-keep-falling-on-my-dem">9.2. Raindrops keep falling on my DEM</a><ul>
+<li><a class="reference internal" href="#differentiation">9.2.1. differentiation</a></li>
+<li><a class="reference internal" href="#raindrops-on-roses-pseudocode">9.2.2. raindrops on roses: pseudocode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dem1.html"
+                        title="previous chapter">8. Random Digital Elevation Model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="helper.html"
+                        title="next chapter">10. Help and related Material</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/dem2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="helper.html" title="10. Help and related Material"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dem1.html" title="8. Random Digital Elevation Model"
+             >previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Prof. P. Lewis, Prof. J. French.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

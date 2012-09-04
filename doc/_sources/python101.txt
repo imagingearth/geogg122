@@ -1,0 +1,482 @@
+Introduction to programming in Python
+=====================================
+
+Python
+------
+Python is a high-level programming language that is suitable for a range of tasks in scientific computing.
+Relevant features include:
+- it is automatically compiled and executed
+- code is *portable* provided you have the appropriate Python modules.
+- for compute intensive tasks, you can easily make calls to methods written in (faster) lower-level languages such as C or FORTRAN
+- there is an active user and development community, which means that new capabilities appear over time and there are many existing extensions and enhancements easily available to you. 
+
+We have provided `some instructions <pythonhelp.html>`_ that should help you set up your own Python installation on your own computer if you need or want to, but you will also easily find information on the web. You will also find other introductory (and more advanced) materials on the web (e.g. `this beginners guide <http://wiki.python.org/moin/BeginnersGuide>`_). Other useful resources include:
+
+- `Python documentation <http://www.python.org/doc/>`_
+- `The Python home Web site <http://www.python.org/>`_
+- `Python FAQ <http://www.python.org/doc/FAQ.html>`_
+
+In this session
+---------------
+
+In this part of the session, we will cover:
+
+[`boolean`_] [`dict`_] [`files`_] [`float`_] [`for`_] [`integer`_] [`ipython`_] [`lists`_] [`modulo`_] [`print`_] [`range`_] [`strings`_] [`type`_] [`variables`_] [`xrange`_]
+
+which is a good deal of the main Python builtin types. You can find more detailed information on this `from docs.python.org <http://docs.python.org/library/stdtypes.html>`_.
+
+
+Getting started
+---------------
+
+.. _ipython:
+
+We will start by using an interactive Python session using ``ipython``. You may already have personal preferences in this matter, and may well wish to use `IDLE <http://docs.python.org/library/idle.html>`_ (Python's Integrated DeveLopment Environment) or some other python shell/environment. It is up to you, but we will assume the use of ``ipython`` from a Unix shell here. 
+
+You should start up ``ipython``, e.g. from Unix by typing::
+
+    berlin% ipython
+
+which should result in the prompt::
+
+    In [1]:
+
+You can now type Python 'commands' at the prompt which will be executed when you hit return. If you just use the standard Python interface (i.e. just typing ``python``), the prompt will be:
+
+    >>>
+
+so we will use this to indicate the prompt. Actually, not every command is executed when you hit return, as sometimes we need to use multiple lines. In this case, the prompt will be::
+
+   ...:
+
+in ``ipython`` or::
+
+   ...
+
+in ``python``. We will use ```...`` in these notes to indicate the line continuation prompt. Obviously, you should not actually type in the prompt parts in these examples.
+
+To exit from the ``ipython`` session, type ``^D`` (CNTRL and D), the standard end of file (EOF) marker.
+
+.. _strings:
+
+String data type
+----------------
+Datatypes are ways that we represent information in the language we are using. Really these are just particular types of classes. One core example is the ``string`` datatype, which we can create within single `'` or double `"` quotes::
+  
+    >>> 'hello world'
+    'hello world'
+    >>> "hello again"
+    'hello again'
+    >>> ''' A string 
+    ... that goes over multiple lines.
+    ... '''
+
+.. _variables:
+
+An important concept in programming is the `variable`. This is the basic way in which we can 'store' information for later manipulation and use. You set the 'contents' of a variable using an equals ``=`` symbol, as you might expect in most languages::
+
+    >>> hw = 'hello world'
+
+.. _print:
+
+Here, we could use the method ``print`` to explicitly print the value of the string that we have assigned to the variable ``hw``::
+
+    >>> print hw 
+    hello world
+
+A method is something that we can apply to a variable, which will typically do something with it, in this case, print out its value.
+The string datatype has a number of 'built in' methods that can be used to manipulate string data. Full information on this can be found by typing::
+
+    >>> help(str)
+
+which will give you detailed information on what you can do with a string. Python documentation is also available online, e.g. at `www.python.org <http://www.python.org/doc/current/lib/string-methods.html>`_. 
+
+We can combine strings with the ``+`` operator, e.g.::
+ 
+    >>> this =  'hello' + 'world'
+    >>> print this
+    helloworld
+
+You will have noticed from this that no space is added automatically, so you might prefer::
+
+    >>> print 'hello' + ' world'
+    hello world
+
+Another way of generating strings is to use a formatting statement, e.g.::
+
+    >>> print 'This is the %s code %s ever wrote'%('first','I')
+    This is the first code I ever wrote
+
+The ``%s`` symbol here stands for 'string' and expects a string argument after it (in the brackets, after the ``%`` symbol). Importantly, we could have used variables here and inserted their values into the string:
+
+    >>> whichOne = 'first'
+    >>> mySelf = 'I'
+    >>> print 'This is the %s code %s ever wrote'%(whichOne,mySelf)
+    This is the first code I ever wrote
+ 
+Some examples of methods for strings then::
+
+    >>> hw = 'hello world'
+    >>> hw.count('l')
+    3
+    >>> hw.find('l')
+    2
+    >>> hw.find('lo')
+    3
+    >>> hw.isdigit()
+    False
+    >>> hw.replace('world','everyone')
+    'hello everyone'
+    >>> hw.split()
+    ['hello', 'world']
+
+.. _lists:
+
+This last one is an interesting example, because it takes a string and splits it into a list. By default the splitting is done on whitespace, but this can be whatever you like, e.g.::
+
+    >>> '1,2,3,4'.split(',')
+    ['1', '2', '3', '4']
+
+Lists
+-----
+
+.. _type:
+
+A list is an important data type as it allows us to group together objects of the same or different types. If we want to confirm what the datatype of something is, we can use the method ``type``::
+
+    >>> type('1 2 3')
+    str
+    >>> type('1 2 3'.split())
+    list
+
+We can form a list using square brackets ``[]``, e.g.::
+
+    >>> thisList = [ 1, 2, '3', '4', '5']
+    >>> type(thisList)
+    list
+    >>> print thisList 
+    [1, 2, '3', '4', '5']
+    >>> print thisList[0]
+    1
+    >>> print type(thisList[0])
+    <type 'int'>
+    >>> print thisList[0:2]
+    [1, 2]
+    >>> print thisList[0:4:2]
+    [1,'3']
+    >>> print thisList[-1]
+    5
+    >>> print thisList[:-3]
+    [1,2]
+    >>> print thisList[-3:]
+    ['3', '4', '5']
+
+From these examples, we learn several things about lists. 
+
+- First, we can express a list with square brackets containing comma separated values. 
+- We can refer to an element in the list using square brackets on the list variable (e.g. ``thisList[0]``).
+- We note that the counting system is 0-based, i.e. the *first* value in a list is ``thisList[0]`` (**not** ``thisList[1]`` as it would be in a one-based language)
+- We can refer to list indices counting from the *end* of the list using negative numbers (so ``thisList[-1]`` is the last element in the list, ``thisList[-2]`` is the second to last etc.)
+- We can refer to a range of values in a list using a colon ``:`` separator, e.g. ``thisList[0:2]`` is list elements 0 to 2 in steps of 1 (N.B. not including the last value, so it means 'from 0 up to but not including 2 in steps of 1'). The example ``thisList[0:4:2]`` involves steps of 2, clearly.
+- In list ranges, the start, end or step can be implicit (as in ``thisList[:-3]`` which is equivalent to ``thisList[0:-3:1]``)
+- A list data type can contain different data types: the first two elements in the list here are in fact integer number representations (``type(thisList[0]) == int``) whereas the others are of data type string (``str``).
+
+You should generate your own list and make sure you appreciate these features of manipulating lists.
+
+A few useful operators (see ``help(list)`` for more details)::
+
+    >>> list = ['1','2','3','4','monsters','walking',"'cross",'the']
+    >>> list.append('floor')
+    >>> print list
+    ['1', '2', '3', '4', 'monsters', 'walking', "'cross", 'the', 'floor']
+    >>> list.extend("I love counting".split())
+    >>> list.remove('monsters')
+    >>> list.insert(4,'penguins')
+    >>> list.pop(6)
+    "'cross"
+    >>> list.insert(6,'by')
+    >>> list.pop(8)
+    'floor'
+    >>> list.insert(8,'door')
+    >>> print ' '.join(list[:-3])
+    1 2 3 4 penguins walking by the door
+    
+Note the use of ``"`` to form a string where the string contains ``'``` in ``"'cross"``.
+Other than that, see if you can follow what the various list methods are doing to the string (you can print what is happening at each stage). The last statement ``print ' '.join(list[:-3])`` is quite complex, but at heart it is using the string method ``join()`` on the string ``' '``, which is really just the opposite of the string ``split()`` operation we saw above. It happens to be a convenient way to produce a string from a list of strings (provided they all *are* strings).
+
+
+.. _integer:
+
+Integers
+--------
+
+We briefly came across the integer data type above. It is important to appreciate the difference between a string representation, e.g. ``'1'`` and a numerical representation such as an integer ``1``. In essence, we can do numerical operations on the latter, but not the former. A good example of this is::
+
+    >>> '1' + '1'
+    '11'
+    >>> 1 + 1
+    2
+
+The first makes use of ``+`` to concatenate two strings, and results in the string ``11``. The second uses the ``+`` operator to perform the numerical operation 'plus' to the two integer numbers. Integer arithmetic proceeds as you would expect it to, but you should note that the result of numerical operations on integers is another integer, e.g.::
+
+    >>> i = 1
+    >>> i += 1
+    >>> i = i + 1
+    >>> i *= 2
+    >>> i = i/2
+    >>> i = i**3
+    >>> i /= 9
+    >>> print i
+    3
+    >>> print i/2
+    1
+
+.. _modulo:
+
+So, 3/2 in integer type is 1. This is clearly involving rounding down. The remainder from such arithmetic can be found with the modulo operator (if needed)::
+
+    >>> print 14/3,14%3
+    4 2
+
+which tells us that 14 is 4 * 3 + 2.
+
+We can include integers in string formatting with a ``%d`` symbol::
+
+    >>> i = 42
+    >>> print 'The answer is %d'%(i)
+    The answer is 42
+
+We could also have converted the integer to a string representation using ``str()``::
+ 
+    >>> i = 42
+    >>> print 'The answer is still %s'%(str(i))
+    The answer is still 42
+
+.. _float:
+
+Floating Point Numbers
+----------------------
+
+A more general numerical number representation is 'floating point' or 'float'::
+
+    >>> type(1.7)
+    float
+
+The same numerical operators can be applied to floating point numbers as we used for integers. Unless we deliberately want to work with inters, we will probably most often work with floating point representation when describing data, as when we have a measurement of some quantity we would normally want:
+
+    >>> print 3.0/2
+    1.5
+
+rather than ``1`` as above. The downsides of floating point representation are:
+
+- the cost of storage is generally higher (more bytes for representation)
+- the representation is not always exact, as the data type has a limited number of bits to `store the representation in <http://steve.hollasch.net/cgindex/coding/ieeefloat.html>`_. 
+
+This latter point can lead to unexpected behaviour for coding newbies::
+
+    >>> x = 1e10
+    >>> y = 1e-20
+    >>> x + y
+    10000000000.0
+
+so we have 'lost' the `1e-20` (`1.0 x 10^-20`) here due to the limitations of the number representation. 
+
+Try::
+
+    >>> 1e10 + 1e-5 
+    10000000000.00001
+    >>> 1e10 + 1e-6
+    10000000000.000002
+    >>> 1e10 + 1e-7
+    10000000000.0
+
+We can include floating point numbers in string formatting with a `%f` symbol. We can expand this by using e.g. `%21.10f` to represent a string conversion of a floating point number with 21 digits (including the decimal point) and 10 decimal places, e.g.::
+
+
+    >>> '%21.10f'%(1e10 + 1e-6)
+    '10000000000.0000019073'
+
+which is not quite the ``10000000000.000001`` that we had in mind. This can cause problems when comparing numbers, so you should generally try to avoid or at least think carefully about the order of operatiopns involving very big and very small numbers. These errors due to representation are called 'rounding errors'. See `docs.python.org <http://docs.python.org/tutorial/floatingpoint.html>`_ for more information on this.
+
+.. _dict:
+
+Dictionaries
+------------
+
+Another important data type is the dictionary (dict) class. This is actually core to much of Python. It is in some ways similar to a list, but its elements are stored in arbitrary order and are accessed via 'keys'. An example is::
+
+    >>> x = 100
+    >>> this = {'foo':'bar','x':x,1:'hello'}
+    >>> print this
+    {'x': 100, 'foo': 'bar', 1: 'hello'}
+    >>> print this[1]
+    hello
+    >>> print this['x']
+    100
+
+As we can see, if we print all of ``this`` it can be in an arbitrary order. We can also see that the keys can be of different data types (integers and strings so far here) as can the values associated with each key. 
+
+We can add new elements::
+
+    >>> this[1.1] = 'a float'
+    
+where we add a key which is a float type here (the keys can be any `hashable <http://docs.python.org/glossary.html>`_ type).
+
+We can have a hierarchy of dictionaries, e.g.::
+
+    >>> that = {'first':1,'second':2}
+    >>> this['sub'] = that
+    >>> print this['sub']['first']
+    1
+
+We can get a list of keys or a list of values::
+
+    >>> that = {'first':1,'second':2}
+    >>> that.keys()
+    ['second', 'first']
+    >>> that.values()
+    [2, 1]
+
+Dictionaries are very useful for a large number of things in Python, but it will suffice to have introduced them here for now.
+See ``help(dict)`` for more details on methods for dictionaries.
+
+.. _boolean:
+
+Boolean data type
+-----------------
+
+The Boolean data type is used for logical operations, for example::
+
+    >>> this = True
+    >>> that = False
+    >>> type(this)
+    bool
+    >>> this and that
+    False
+    >>> this or that 
+    True
+    >>> not this or that
+    False
+
+These are just simple logical statements. Make sure you understand these basic operations, as we will use logic considerably later.
+
+.. _files:
+
+File input and output
+---------------------
+
+One common thing we want to do in programming is to read from or write to files in `ASCII <http://en.wikipedia.org/wiki/ASCII>`_ format. This is simple to do in a high level language such as Python. First, let's generate a dataset that we want to write out::
+
+    >>> data = [[1.,2.,3.,4.,5.],[1.,4.,9.,16.,25.]]
+    >>> print data
+    [[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 4.0, 9.0, 16.0, 25.0]]
+    >>> print len(data)
+    2
+    >>> print len(data[0])
+    5
+
+This is a slightly different list to the ones we've seen above. It is a 2-dimensional array that we have created by nesting lists. We also see the ``len()`` method which reports the length of a list (or similar data types) in its outer dimension (2 here). ``data[0]`` then is of length 5.
+
+    >>> outfile = file('tmp.dat',"w")
+    >>> for i in range(len(data[0])):
+    ...     outfile.writelines('%f %f\n'%(data[0][i],data[1][i]))
+    ...
+    >>> outfile.close()
+
+The file we have created, ``tmp.dat`` should contain::
+
+    1.000000 1.000000
+    2.000000 4.000000
+    3.000000 9.000000
+    4.000000 16.000000
+    5.000000 25.000000
+
+We have introduced a few new concepts here. First, we notice how we can open a file *for writing*: ``outfile = file('tmp.dat',"w")``. The variable ``outfile`` is set to the information we get from calling the ``file()`` method (see ``help(file)``). 
+
+.. _for:
+.. _range:
+
+Second, we have made use of a ``for`` loop to iterate over the elements in the variable ``data``. 
+
+The method ``range(len(data[0]))`` returns the list ``[0, 1, 2, 3, 4]``, so we could have written::
+
+    >>> for i in [0, 1, 2, 3, 4]:
+    ...    outfile.writelines('%f %f\n'%(data[0][i],data[1][i]))
+
+.. _xrange:
+
+In fact, for looping of this sort, we would normally use ``xrange``, an iterable object that doesn't have to explicitly form the list::
+
+    >>> for i in xrange(len(data[0])):
+    ...     outfile.writelines('%f %f\n'%(data[0][i],data[1][i]))
+
+Thinking about the list produced by ``range`` is however easier to start with. What happens in the ``for`` loop then is that the variable ``i`` takes the value of each item in the list, sequentially, so the first time we are in the loop, ``i = 0``, and we are writing the elements of the list ``data``, ``data[0][0]`` and ``data[1][0]``.
+
+The ``\n`` character in the format statement is new to us as well. This stands for 'newline', so that after ``data[0][0]`` and ``data[1][0]`` are written as string representations of their floating point numbers, a 'newline' character is written to the file.
+
+The line ``outfile.close()`` closes the file, flushing any data in buffers whilst doing so.
+
+One important feature of this snippet of code is that it shows how in Python, indentation (4 spaces here) must be used to define elements within any iteration / control structure.
+
+Let us now consider how to read data from such a file. This is similar to above::
+
+    >>> indata = open('tmp.dat','r').readlines()
+
+but we can read all data at the same time with the ``file`` method ``readlines()``. We could have done this in more steps as::
+
+    >>> infile = open('tmp.dat','r')
+    >>> indata = infile.readlines()
+
+If we now look at what has been read in, we will see::
+
+    >>> print infile
+    ['1.000000 1.000000\n', '2.000000 4.000000\n', '3.000000 9.000000\n', '4.000000 16.000000\n', '5.000000 25.000000\n']
+    >>> print len(infile)
+    5
+
+The list ``infile`` then has 5 elements, the first of which is ``'1.000000 1.000000\n'``. Note that it has a newline character in the end and that it is a string. File input and output of this sort all takes place as strings.
+
+We can split this up into a list 5 x 2 elements using e.g.::
+
+    >>> indata = open('tmp.dat','r').readlines()
+    >>> data = []
+    >>> for i in xrange(len(indata)):
+    ...     data.append(indata[i].split())
+
+This is quite instructive. We know how many elements there are in the dataset from the number of lines we read from the file (``len(indata)``) and we can just loop over these, split the string we have for each line, then append it to the list (noting that we set the original list to ``[]``, and empty list).
+
+But the data would still be strings::
+
+    >>> print data
+    [['1.000000', '1.000000'],
+     ['2.000000', '4.000000'],
+     ['3.000000', '9.000000'],
+     ['4.000000', '16.000000'],
+     ['5.000000', '25.000000']]
+
+which is probably not what we want, and is in any case the 'wrong way around' compared to our original data representation. 
+
+At the heart of what we need, is to convert a string data type to a float. We do this with the method ``float()``.
+
+    >>> data = []
+    >>> values = []
+    >>> for i in xrange(len(indata)):
+    ...     linedata = indata[i].split()
+    ...     data.append(float(linedata[0]))
+    ...     values.append(float(linedata[1]))
+    ...
+    >>> data = [data,values]
+    >>> print data
+    [[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 4.0, 9.0, 16.0, 25.0]]
+
+This is more what we are after, although the code we have written is not very flexible (it will only work if there are 2 columsn of data).
+
+
+Summary
+-------
+
+In this session, we have been introduced to some basic concepts in Python. These are mainly associated with some basic operations on the inbuilt Python data types, but we have also come across control using a ``for`` loop and the fact that Python code is indented in such cases. 
+
+  [`boolean`_] [`dict`_] [`files`_] [`float`_] [`for`_] [`integer`_] [`ipython`_] [`lists`_] [`modulo`_] [`print`_] [`range`_] [`strings`_] [`type`_] [`variables`_] [`xrange`_]
+
+

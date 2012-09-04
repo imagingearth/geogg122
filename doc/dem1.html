@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8. Random Digital Elevation Model &mdash; GeogG122 v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GeogG122 v1.0 documentation" href="index.html" />
+    <link rel="next" title="9. Improving and extending the DEM code" href="dem2.html" />
+    <link rel="prev" title="7. Numerical and Scientific Python and Data Visualisation" href="pythonmodel.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dem2.html" title="9. Improving and extending the DEM code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pythonmodel.html" title="7. Numerical and Scientific Python and Data Visualisation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="random-digital-elevation-model">
+<h1>8. Random Digital Elevation Model<a class="headerlink" href="#random-digital-elevation-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>8.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Here we will write a simple Python code to generate a 2D random correlated field which we will use to represent a DEM.
+We will also demonstrate some features of <tt class="docutils literal"><span class="pre">numpy</span></tt>, <tt class="docutils literal"><span class="pre">scipy</span></tt> and <tt class="docutils literal"><span class="pre">matplotlib</span></tt>, and demonstrate spatial convolution in Python.</p>
+<p>In particular:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#np-random-rand">np.random.rand</a>] [<a class="reference internal" href="#plt-imshow">plt.imshow</a>] [<a class="reference internal" href="#plt-show">plt.show</a>] [<a class="reference internal" href="#matplotlib-pylab">matplotlib.pylab</a>] [<a class="reference internal" href="#np-mgrid">np.mgrid</a>] [<a class="reference internal" href="#np-exp">np.exp</a>] [<a class="reference internal" href="#np-shape">np.shape</a>] [<a class="reference internal" href="#np-size">np.size</a>] [<a class="reference internal" href="#scipy-signal">scipy.signal</a>] [<a class="reference internal" href="#scipy-signal-convolve">scipy.signal.convolve</a>] [<a class="reference internal" href="#add-subplot">add_subplot</a>] [<a class="reference internal" href="#contour">contour</a>] [<a class="reference internal" href="#plot">plot</a>] [<a class="reference internal" href="#plt-figure">plt.figure</a>] [<a class="reference internal" href="#mpl-toolkits">mpl_toolkits</a>] [<a class="reference internal" href="#mplot3d">mplot3d</a>] [<a class="reference internal" href="#axes3d">axes3d</a>] [<a class="reference internal" href="#view-init">view_init</a>] [<a class="reference internal" href="#plot-wireframe">plot_wireframe</a>] [<a class="reference internal" href="#draw">draw</a>]</div></blockquote>
+</div>
+<div class="section" id="random-dem">
+<span id="np-random-rand"></span><h2>8.2. Random DEM<a class="headerlink" href="#random-dem" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">nx</span> <span class="o">=</span> <span class="mi">360</span>
+<span class="n">ny</span> <span class="o">=</span> <span class="mi">360</span>
+<span class="n">dem1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span><span class="n">ny</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We first import the numpy package but for convenience give it the local name <tt class="docutils literal"><span class="pre">np</span></tt> (<tt class="docutils literal"><span class="pre">import</span> <span class="pre">numpy</span> <span class="pre">as</span> <span class="pre">np</span></tt>). Next we set up two variables that we will use to represent the dimensions of the array (<tt class="docutils literal"><span class="pre">nx</span></tt> and <tt class="docutils literal"><span class="pre">ny</span></tt>). We then use the <tt class="docutils literal"><span class="pre">random.rand()</span></tt> method in numpy to generate the 2D random array.</p>
+<p>This is a bit big to use <tt class="docutils literal"><span class="pre">print</span></tt> with (though you could try), so we need some way of visualising it. We can do this using <tt class="docutils literal"><span class="pre">pylab</span></tt>:</p>
+<div class="highlight-python" id="matplotlib-pylab"><span id="plt-show"></span><span id="plt-imshow"></span><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">dem1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem1Fig1.png" src="_images/dem1Fig1.png" style="width: 15cm;" />
+<p class="caption">Figure 1. Random DEM</p>
+</div>
+</div>
+<div class="section" id="filter">
+<h2>8.3. Filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h2>
+<p>Next, we will &#8216;smooth&#8217; the dataset with a convolution filter to induce correlation. To do this we must first generate a filter. For smoothing, we might choose a Gaussian filter, so we will need to apply a <a class="reference external" href="ihttp://mathworld.wolfram.com/GaussianFunction.html">Gaussian function</a> in 2D. To make this interesting, we will have a filter which is different dimensions in x and y:</p>
+<div class="highlight-python" id="np-exp"><span id="np-mgrid"></span><div class="highlight"><pre><span class="n">sizex</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">sizey</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="o">-</span><span class="n">sizex</span><span class="p">:</span><span class="n">sizex</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">sizey</span><span class="p">:</span><span class="n">sizey</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.333</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sizex</span><span class="p">)</span><span class="o">+</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">sizey</span><span class="p">)))</span>
+<span class="nb">filter</span> <span class="o">=</span> <span class="n">g</span><span class="o">/</span><span class="n">g</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.mgrid.html">Here, np.mgrid</a> (see <tt class="docutils literal"><span class="pre">help(np.mgrid)</span></tt>) generates an N-dimensional grid of <em>indices</em> in the <tt class="docutils literal"><span class="pre">numpy</span></tt> arrays <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt>:</p>
+<div class="highlight-python" id="np-size"><span id="np-shape"></span><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">&lt;type &#39;numpy.ndarray&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(61, 21)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span>
+<span class="go">1281</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">x</span>
+<span class="go">[[-30 -30 -30 ..., -30 -30 -30]</span>
+<span class="go"> [-29 -29 -29 ..., -29 -29 -29]</span>
+<span class="go"> [-28 -28 -28 ..., -28 -28 -28]</span>
+<span class="go"> ...,</span>
+<span class="go"> [ 28  28  28 ...,  28  28  28]</span>
+<span class="go"> [ 29  29  29 ...,  29  29  29]</span>
+<span class="go"> [ 30  30  30 ...,  30  30  30]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">y</span>
+<span class="go">[[-10  -9  -8 ...,   8   9  10]</span>
+<span class="go"> [-10  -9  -8 ...,   8   9  10]</span>
+<span class="go"> [-10  -9  -8 ...,   8   9  10]</span>
+<span class="go"> ...,</span>
+<span class="go"> [-10  -9  -8 ...,   8   9  10]</span>
+<span class="go"> [-10  -9  -8 ...,   8   9  10]</span>
+<span class="go"> [-10  -9  -8 ...,   8   9  10]]</span>
+</pre></div>
+</div>
+<p>We have introduced a few useful methods here for examining numpy arrays. <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ma.shape.html">Here, np.shape</a> gives a <a class="reference external" href="http://docs.python.org/release/1.5.1p1/tut/tuples.html">tuple</a> giving the dimensions of the array <tt class="docutils literal"><span class="pre">x</span></tt> (similarly <tt class="docutils literal"><span class="pre">y</span></tt> of course). You should note that the range of numbers given in <tt class="docutils literal"><span class="pre">np.mgrid</span></tt> is <em>inclusive</em>, so the numbers here go from -30 to +30 (thence 61 entries). <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.size.html">We use np.size</a> to give the total number of elements in the array. We can also note how the <tt class="docutils literal"><span class="pre">print</span></tt> method works with printing arrays that are a bit big to show.</p>
+<p>The <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.exp.html">method np.exp</a> applies an exponential function to the arrays (N.B. <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt> need to have the same shape to do this, otherwise you couldn&#8217;t add them together with <tt class="docutils literal"><span class="pre">x**2/float(sizex)+y**2/float(sizey)</span></tt>). This is a nice example of one of the features of using numpy: we can apply functions (methods) to <em>arrays</em>, so we do not have to loop over the array and apply it to each element. This makes for clearer code, but is also generally more efficient. The Gaussian function we have generated is scaled by 0.333 to avoid having too many zero values in the convolution array (spatial convolution in this way is quite expensive computationally) but there are dangers of <a class="reference external" href="http://en.wikipedia.org/wiki/Ringing_%28signal%29">ringing</a> if you cut the filter off too soon and leave sharp transitions more generally).</p>
+<p>Finally in the code snippet, we normalise the Gaussian function so that it has an integral of unity. The method <a class="reference external" href="ihttp://docs.scipy.org/doc/numpy/reference/generated/numpy.sum.html">np.sum()</a> gives the sum of the elements in the array, so dividing by this will normalise the function.</p>
+<p>We can visualise the filter we have generated:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem1Fig2.png" src="_images/dem1Fig2.png" style="width: 15cm;" />
+<p class="caption">Figure 2. Gaussian filter</p>
+</div>
+</div>
+<div class="section" id="convolution">
+<h2>8.4. Convolution<a class="headerlink" href="#convolution" title="Permalink to this headline">¶</a></h2>
+<p>Now, we have a spatial dataset and a filter, so we want to <a class="reference external" href="http://docs.gimp.org/en/plug-in-convmatrix.html">convolve</a> one with the other. We can use the method convolve <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/signal.html">in scipy.signal</a>:</p>
+<div class="highlight-python" id="scipy-signal-convolve"><span id="scipy-signal"></span><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="n">demSmooth</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">dem1</span><span class="p">,</span><span class="nb">filter</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;valid&#39;</span><span class="p">)</span>
+<span class="c"># rescale so it lies between 0 and 1</span>
+<span class="n">demSmooth</span> <span class="o">=</span> <span class="p">(</span><span class="n">demSmooth</span> <span class="o">-</span> <span class="n">demSmooth</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="p">(</span><span class="n">demSmooth</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">demSmooth</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>We might now check the size of the output:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">dem1</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(360, 360)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">demSmooth</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(300, 340)</span>
+</pre></div>
+</div>
+<p>and visualise it with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">demSmooth</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem1Fig3.png" src="_images/dem1Fig3.png" style="width: 15cm;" />
+<p class="caption">Figure 3. Correlated Random DEM</p>
+</div>
+<p>We note that when we printed the size of the final &#8216;smooth&#8217; DEM it was smaller. Use the help pages for <tt class="docutils literal"><span class="pre">scipy.signal.convolve</span></tt> and your understanding of convolution to appreciate why this is so and what the options might have been.</p>
+<p>This random correlated field is now something that we could use to approximate a DEM. It has generally linear features running North-South because of the shape of the filter we applied, but other than that, plenty of little hills and valleys. Correlated random fields are useful for many applications, but here, we just want a pseudoDEM.</p>
+</div>
+<div class="section" id="more-plotting">
+<h2>8.5. more Plotting<a class="headerlink" href="#more-plotting" title="Permalink to this headline">¶</a></h2>
+<p>You should explore <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> and perhaps particularly the <a class="reference external" href="http://matplotlib.sourceforge.net/gallery.html">gallery</a> to begin with to work out how to produce some neater plots than the ones we have generated here.</p>
+<p>We will however show a few quick examples:</p>
+<p>First, some contours:</p>
+<div class="highlight-python" id="contour"><span id="add-subplot"></span><div class="highlight"><pre><span class="n">X</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">demSmooth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">:</span><span class="n">demSmooth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+<span class="n">X</span> <span class="o">+=</span> <span class="n">sizex</span>
+<span class="n">Y</span> <span class="o">+=</span> <span class="n">sizey</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">demSmooth</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem1Fig4.png" src="_images/dem1Fig4.png" style="width: 15cm;" />
+<p class="caption">Figure 4. Contours</p>
+</div>
+<p>Next, a slice through the DEM, showing the original data as well:</p>
+<div class="highlight-python" id="plot"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">demsub</span> <span class="o">=</span> <span class="n">dem1</span><span class="p">[</span><span class="n">sizex</span><span class="p">:</span><span class="o">-</span><span class="n">sizex</span><span class="p">,</span><span class="n">sizey</span><span class="p">:</span><span class="o">-</span><span class="n">sizey</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span><span class="n">demsub</span><span class="p">[:,</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span><span class="s">&#39;b^&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span><span class="n">demSmooth</span><span class="p">[:,</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem1Fig5.png" src="_images/dem1Fig5.png" style="width: 15cm;" />
+<p class="caption">Figure 5. Slice</p>
+</div>
+<p>Incidentally in this example, we show how to generate a subset of the data, generating <tt class="docutils literal"><span class="pre">demsub</span></tt> to match <tt class="docutils literal"><span class="pre">demSmooth</span></tt>.</p>
+<p>Finally, a 3D grid plot that might be good for visualising terrain:</p>
+<div class="highlight-python" id="draw"><span id="plot-wireframe"></span><span id="view-init"></span><span id="axes3d"></span><span id="mplot3d"></span><span id="mpl-toolkits"></span><span id="plt-figure"></span><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">axes3d</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="o">-</span><span class="mf">141.</span><span class="p">,</span><span class="mf">60.</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span><span class="n">demSmooth</span><span class="p">,</span><span class="n">cstride</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">rstride</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c">#plt.draw()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure">
+<img alt="_images/dem1Fig6.png" src="_images/dem1Fig6.png" style="width: 15cm;" />
+<p class="caption">Figure 6. 3D wireframe</p>
+</div>
+<p>If you uncomment the <tt class="docutils literal"><span class="pre">plt.draw()</span></tt> line, you will be able to interact with the plot.</p>
+<p>For more sophisticated 3D plotting, see <a class="reference external" href="http://code.enthought.com/projects/mayavi/">mayavi</a>.</p>
+</div>
+<div class="section" id="generation-of-this-page">
+<h2>8.6. Generation of this page<a class="headerlink" href="#generation-of-this-page" title="Permalink to this headline">¶</a></h2>
+<p>The code for this page is in <a class="reference external" href="dem1.py">dem1.py</a>.</p>
+<p>As an interesting aside, you might be interested to know that this tutorail page was generated using a tool called <a class="reference external" href="http://mpastell.com/pweave/index.html">Pweave</a> which executes the Python code examples here (and generates graphs etc.) as it forms the html (or pdf etc.) page you see here. It would be interesting for you to generate your coursework submissions using this, if you are prepared to put a little extra learning in. The main feature of this is a Python package called <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a>. If you are using your own computer, you can readily install these with:</p>
+<div class="highlight-python"><pre>berlin% sudo easy_install -U Sphinx Pweave</pre>
+</div>
+<p>The pweave text for this page is <a class="reference external" href="../../source/dem1.Pnw">here</a> and the <a class="reference external" href="../../source/dem1.rst">restructured text generated by pweave here</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8. Random Digital Elevation Model</a><ul>
+<li><a class="reference internal" href="#introduction">8.1. Introduction</a></li>
+<li><a class="reference internal" href="#random-dem">8.2. Random DEM</a></li>
+<li><a class="reference internal" href="#filter">8.3. Filter</a></li>
+<li><a class="reference internal" href="#convolution">8.4. Convolution</a></li>
+<li><a class="reference internal" href="#more-plotting">8.5. more Plotting</a></li>
+<li><a class="reference internal" href="#generation-of-this-page">8.6. Generation of this page</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pythonmodel.html"
+                        title="previous chapter">7. Numerical and Scientific Python and  Data Visualisation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dem2.html"
+                        title="next chapter">9. Improving and extending the DEM code</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/dem1.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dem2.html" title="9. Improving and extending the DEM code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pythonmodel.html" title="7. Numerical and Scientific Python and Data Visualisation"
+             >previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Prof. P. Lewis, Prof. J. French.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

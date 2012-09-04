@@ -1,0 +1,411 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. A Brief Introduction to Unix &mdash; GeogG122 v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GeogG122 v1.0 documentation" href="index.html" />
+    <link rel="next" title="4. Some more Unix and associated tools" href="unix_two.html" />
+    <link rel="prev" title="2. Structure of the Course" href="structure.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="unix_two.html" title="4. Some more Unix and associated tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structure.html" title="2. Structure of the Course"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="a-brief-introduction-to-unix">
+<h1>3. A Brief Introduction to Unix<a class="headerlink" href="#a-brief-introduction-to-unix" title="Permalink to this headline">¶</a></h1>
+<p>This course will be taught mainly under a Unix operating system. This part of the introduction is intended for background reading and we will not go through it in quite the same way in class.</p>
+<p>Unix commands and and a few options learned here:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#alias">alias</a>] [<a class="reference internal" href="#cd">cd</a>] [<a class="reference internal" href="#chmod">chmod</a>] [<a class="reference internal" href="#cp">cp</a>] [<a class="reference internal" href="#df">df</a>] [<a class="reference internal" href="#ls">ls</a>] [<a class="reference internal" href="#mkdir">mkdir</a>] [<a class="reference internal" href="#mv">mv</a>] [<a class="reference internal" href="#pwd">pwd</a>] [<a class="reference internal" href="#quota">quota</a>] [<a class="reference internal" href="#rm">rm</a>] [<a class="reference internal" href="#rmdir">rmdir</a>]</div></blockquote>
+<p>with a few options:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#cp-r">cp-R</a>] [<a class="reference internal" href="#ls-l">ls-l</a>] [<a class="reference internal" href="#rm-f">rm-f</a>] [<a class="reference internal" href="#rm-i">rm-i</a>] [<a class="reference internal" href="#rm-r">rm-r</a>]</div></blockquote>
+<p>The Unix symbols come across are:</p>
+<blockquote>
+<div>[<tt class="docutils literal"><span class="pre">/</span></tt>: <a class="reference internal" href="#slash">slash</a>] [<tt class="docutils literal"><span class="pre">\</span></tt>: <a class="reference internal" href="#backslash">backslash</a>] [dotdot: <a class="reference internal" href="#id1">..</a>] [dot: <a class="reference internal" href="#id4">.</a>] [tilde/twiddle: <a class="reference internal" href="#id3">~</a>] [star/wildcard: <a class="reference internal" href="#id5">*</a>] [single wildcard: <a class="reference internal" href="#id6">?</a>]</div></blockquote>
+<p>We will cover this material in week 1 of the class. You will need to have become familiar with the basic concepts and commands to progress through week 2 and beyond.</p>
+<div class="section" id="what-is-unix">
+<h2>3.1. What is Unix?<a class="headerlink" href="#what-is-unix" title="Permalink to this headline">¶</a></h2>
+<p>UNIX is a multi-user operating system: that is, a suite of programs which run on a computer and allows interface to the hardware and software available. It allows many users to share a powerful machine and all the available resources, each user running their own processes simultaneously. This true multi-tasking aspect of UNIX allows a far greater flexibility than is possible with other operating systems, even more recent multi-tasking versions of popular PC operating systems (note that the <a class="reference external" href="http://en.wikipedia.org/wiki/Linux">linux</a> is simply a &#8216;flavour&#8217; of UNIX &amp; that the Mac operating system <a class="reference external" href="http://en.wikipedia.org/wiki/Mac_OS_X">OS-X</a> has a good deal of UNIX system within it). The advantages of a truly flexible multi-tasking operating system has been demonstrated with the popularity of UNIX in the scientific, engineering and financial communities, along with the rise of Linux and OS-X.</p>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/X11">X11</a> is the windowing system that you will generally use to interface with the operating system. A key aspect of this has always been the idea of remote graphical user interfaces via X11, which allows a user to run and visualise processes on different Unix machines. You are not limited to accessing the computer you are sat in front of, but can easily make wider use of local or external resources. You will find this useful as you can log on to the UCL Geography Unix computers from outside UCL (from pretty well any other operating system) and (with appropriate X11 software such as <a class="reference external" href="http://en.wikipedia.org/wiki/Cygwin/X">cygwin</a> or <a class="reference external" href="http://connectivity.opentext.com/products/exceed-freedom.aspx">exceed</a>, if you are working from a Windows computer, or directly from any Unix/linux computer os OS-X machine) run windowing sessions the same as if you were physically at the UCL computer (given sufficient bandwidth).</p>
+<div class="section" id="workstations-and-networks">
+<h3>3.1.1. Workstations and networks<a class="headerlink" href="#workstations-and-networks" title="Permalink to this headline">¶</a></h3>
+<p>Workstations that run UNIX are not like the way most people use PCs running Windows... At any time of the day or night a UNIX machine is running literally hundreds of processes simultaneously: Some are long-term user processes (such as research experiments) placed at low priority to avoid affecting other users, which may run for weeks, but most are concerned with the second by second activities of maintaining the network.</p>
+<p>Physically, the network consists of wires (ethernet cables, phone lines, fibre-optic cables etc.) or wireless connections (locally and externally) running between computers both at local and remote sites. At the local level (within a University Dept. for example) the wires literally connect every machine to every other, either in a loop, or in a star-like arrangement with machines linked around central communications hubs. Such arrangements of connections, machines and attached peripheral devices is known as a Local Area Network or LAN. Larger arrangements of connections, for instance between departments in a university rather than individual computers, are known as Wide Area Networks or WANs.</p>
+<p>It is through this ability to transparently network computers together that UNIX really gains its power. Very often the data a user processes on one computer is actually stored on another (a paradigm that has (indirectly) led to the development of the Internet and World Wide Web). Similarly it is commonplace to process data on one machine whilst physically sitting in quite a different location (even on a different continent!). The limiting idea of the machine that you are sitting in front of being the machine you are using for processing (as in the PC-based computing environment) is very much obsolete in the case of UNIX computing. Using the network, it is also possible to break large processes into a number of smaller jobs and distribute them across multiple machines simultaneously, thereby reducing execution times dramatically. In a properly set-up UNIX LAN network, the storage of a users data on a remote machine, or their working on a remote machine should be a relatively transparent operation. Such concepts of networking are not confined to UNIX machines, although UNIX (in all its varieties) is far and away the most common from of operating system used for wide area networking.</p>
+<p>Because a UNIX machine never stops processing, the are never switched off by anyone other than the system manager or a relevant member of staff. Simply switching off as you might with a PC can cause irreparable damage to a UNIX machine and/or the data stored on it - remember, your data/project could be on the disk you just killed, so don&#8217;t do it! If you think that there is something wrong with a machine, do not attempt to fix it yourself: call or email the system manager or ask a knowledgeable person for advice. Under no circumstances should you attempt to reboot a workstation yourself, as unless shut down properly damage to data, both yours and that of others is likely to result.</p>
+<p>Many workstations you will come across have a simple power-saving device: the screen turns itself off if the keyboard hasn&#8217;t been used for a few minutes. To turn the screen back on, simply press a key on the keyboard such as shift, ctrl or the space bar. Often the monitor will have been turned off by the last user to save power (and to stop the lab heating up!) - in most cases, the monitors have a switch or button located on the lower right front of the monitor. If the monitor is on, a small green LED will light up. This is the only switch you should ever touch on the workstations. If it&#8217;s not on the front of the monitor, please leave it alone.</p>
+</div>
+<div class="section" id="accounts-and-passwords">
+<h3>3.1.2. Accounts and passwords<a class="headerlink" href="#accounts-and-passwords" title="Permalink to this headline">¶</a></h3>
+<p>Since UNIX allows many users access to the same computer at the same time, there has to be some way of separating each users data, processes and storage space. This is accomplished by means of accounts, created for each user by the system manager. Each person maintains their data and programs within their own account, and their processes are identified when running by means of their account name. Usually an account name will be a construct of the user&#8217;s real name, but not always. This account name is also known as your username (e.g. Lewis&#8217;s username is plewis). As an aside, if you have already registered with ISD you will have been issued a username from the ISD system of the form ucfaxxx, which is a separate account from your Geography one. The account name for studxents will be the same on the UCL Geography system as it is on the wider UCL system, but the computers you access (and you password) will generally be different.</p>
+<p>To provide protection for users&#8217; data and processes, each account is assigned a password. This password will be given to you by the system manager, but you may change it at any time. You must keep this password secret, and should never allow other people to use your account. Other people can make mistakes and damage your data - and even if it was your best friend it will be your responsibility (letting other people use your account is an infringement of college regulations, and could result in a suspension of your computing privileges, or worse). Passwords are stored in encrypted form on the network so that not even the system manager can access them. As a general rule passwords should be changed every couple of months or so, but there are rules for choosing them: you must not use your username, your real name or any derivative (including backwards etc.), anybody else&#8217;s name, birthdate, favourite colour, football team, pet, or any word in any dictionary of any language - these are all too easy to break/guess. As are characters from film, Tv etc. If you know it - someone else does too. Passwords must be a minimum of 6 characters long, preferably 8, and should contain a mix of letters, numbers (both upper and lower case - to UNIX, an <tt class="docutils literal"><span class="pre">a</span></tt> and an <tt class="docutils literal"><span class="pre">A</span></tt> are not the same) or punctuation such as commas of exclamation marks. Try not to use combinations of keys involving the ctrl key, as this can lead to difficulties when trying to log in. Only the first 8 characters of the password are significant.</p>
+</div>
+<div class="section" id="logging-in">
+<h3>3.1.3. Logging in<a class="headerlink" href="#logging-in" title="Permalink to this headline">¶</a></h3>
+<p>The process of signing on to the computer is known as the login process. Sometimes people will refer to your account as your login. This is because when the computer is waiting for somebody to use it displays a login prompt. There are various interfaces to logging in, but they will all in some way provide a text space for you to type your username (e.g. ucfxabcd). Generally, you hit &#8216;return&#8217; (the return or enter key) or sometimes click on a &#8216;continue&#8217; button (or similar) and then enter your password. The password will not generally be shown (it may not show anything or may show <tt class="docutils literal"><span class="pre">********</span></tt>). In the Geography Unix lab, you have a selection of windowing systems (that run on top of the basic X11 setup but all of which use X11) and you are free to choose whichever you want. For teaching classes however, its generally best that we all use the same one.</p>
+<p>When successfully logged in, if you are sitting at a workstation then you will usually have several areas to type in, or windows, started up for you along with such graphical utilities as a clock and a calendar.</p>
+</div>
+<div class="section" id="the-command-line">
+<h3>3.1.4. The command line<a class="headerlink" href="#the-command-line" title="Permalink to this headline">¶</a></h3>
+<p>The UNIX prompt is a sequence of characters that the part of the operating system (OS) that you interact with, known as the shell, places at the start of each line when it is expecting you to enter a command. Often this prompt will be formed by the name of the machine to which you are logged in, followed by a <tt class="docutils literal"><span class="pre">%</span></tt> sign. For instance:</p>
+<div class="highlight-python"><pre>berlin%</pre>
+</div>
+<p>which will indicate that you are logged on through a window (which you might call a terminal or a shell though these are subtly different things).</p>
+<p>The nature of the prompt will vary from system to system, but the Geography machines have a prompt as above. When you become experienced you can customise the prompt to your own liking. The cursor (a small solid rectangle or underscore symbol) placed after the prompt tells you where your current typing position is (clicking in the window with the mouse doesn&#8217;t mover the cursor - it always remians at the end of the current line you&#8217;re on). The current line with the prompt is therefore known as the command line. Depending on the particular shell you are using and the sort of keyboard you have, you may be able to use up and down arrows to quickly go back through commands that you have typed at that prompt (in that shell session) (i.e. your history).</p>
+</div>
+<div class="section" id="logging-out">
+<h3>3.1.5. Logging out<a class="headerlink" href="#logging-out" title="Permalink to this headline">¶</a></h3>
+<p>When you have finished your session at the computer, you must log off. To achieve this from a remote PC/Mac connection, simply type logout or exit at the prompt. From within a windowing session at the machine itself, select the logout option from your root menu (see the section on the windowing system for more details), and then confirm the logout by clicking on yes. If you leave yourself logged on then other people may come along and use your account, access your email etc. Whilst in a University environment this is not necessarily a problem - the next user will probably come along and log you out so that they can log on themselves it is important to log out so that other people don&#8217;t waste time wondering whether you have finished, or have just popped out for a few minutes. Don&#8217;t lock your workstation - this is anti-social behaviour as it prevents anyone else using it, and if we see it we&#8217;ll log you out anyway, and probably take all your pocket money away. If you leave for more than a few minutes, log yourself out. One of the advantages of a UNIX system is that you can leave a job running in the &#8216;background&#8217; (don&#8217;t worry, we&#8217;ll get to that later) which means it&#8217;ll keep running for as long as you want even after you log out.</p>
+</div>
+</div>
+<div class="section" id="the-unix-file-system">
+<h2>3.2. The UNIX file system<a class="headerlink" href="#the-unix-file-system" title="Permalink to this headline">¶</a></h2>
+<p>All information in UNIX, whether it is a program, data or text, is stored in files. These files are maintained by the operating system on hard disks (usually), and read into the computer&#8217;s memory when required. Files may be grouped together in directories (equivalent to folders), and these directories may themselves contain other directories and/or files. In fact, directories are really a special kind of file, but the user perceives the whole structure as forming a hierarchy of files and directories. This hierarchy is known as the filesystem. When UNIX computers are networked, the filesystem is not contained within one single machine, but spans the entire network. Each file and directory within the network filesystem is addressable via its own unique name - its filename, or directory name, and to the user the fact that the filesystem straddles multiple machines and hard disks goes largely unnoticed.</p>
+<p id="slash">The filesystem may be visualised as the roots of a tree. At the very top level of the filesystem on each individual machine resides the root directory, denoted <tt class="docutils literal"><span class="pre">/</span></tt> (slash).</p>
+<p>Beneath this directory lie the other directories containing files and further directories, including data and references to data stored elsewhere on the network.</p>
+<div class="section" id="absolute-and-relative-path-names">
+<h3>3.2.1. Absolute and relative path names<a class="headerlink" href="#absolute-and-relative-path-names" title="Permalink to this headline">¶</a></h3>
+<p>We have already mentioned that every file or directory in the filesystem is uniquely addressable by its filename or directory name. In fact a file&#8217;s full name is a description of the path from the root of the file system to the file itself. For instance, the directory <tt class="docutils literal"><span class="pre">bin</span></tt> under the <tt class="docutils literal"><span class="pre">usr</span></tt> directory has the full name:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">/usr/bin</span></tt></div></blockquote>
+<p>Note that as well as being the root of the filesystem, <tt class="docutils literal"><span class="pre">/</span></tt> is also used as a directory separator for full filenames and paths (note that is the opposite of the Windows/DOS directory separator <tt class="docutils literal"><span class="pre">\</span></tt>). Here the directory bin
+is reached by starting at the root of the system, <tt class="docutils literal"><span class="pre">/</span></tt>, going into the <tt class="docutils literal"><span class="pre">usr</span></tt> directory. A directory contained within another directory is known as a sub-directory of its parent, or container, directory. The <tt class="docutils literal"><span class="pre">/usr/</span></tt>
+section of the full filename is known as the absolute path(name) to the file - absolute because it starts at the root of the system. With this nomenclature we are able to move around the filesystem.</p>
+<p id="id1">Similarly, relative pathnames are permissible, describing the route to another path or directory from the current directory: the file <tt class="docutils literal"><span class="pre">xeyes</span></tt> in the directory <tt class="docutils literal"><span class="pre">/usr/X11/bin</span></tt> may be addressed either absolutely as:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">/usr/X11/bin/xeyes</span></tt></div></blockquote>
+<p>or relative to the <tt class="docutils literal"><span class="pre">/usr/X11/lib</span></tt> directory as:</p>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">../bin/xeyes</span></tt></div></blockquote>
+<p>where <tt class="docutils literal"><span class="pre">..</span></tt> is a special symbol meaning &#8216;up one directory level&#8217;.
+An analogy is the address of your next door neighbour&#8217;s house. If you wanted to tell a friend what next door&#8217;s address is, you could give them the house number, the street, the city, the post code, and even the country. That&#8217;s the absolute path name to your neighbour&#8217;s house. Of course it&#8217;s much easier to specify &#8220;one house up from mine&#8221; or &#8220;number 18&#8221; etc. This is the relative path (relative to yours).</p>
+</div>
+<div class="section" id="negotiating-the-file-system">
+<h3>3.2.2. Negotiating the file system<a class="headerlink" href="#negotiating-the-file-system" title="Permalink to this headline">¶</a></h3>
+<p>Each user in a UNIX network system has specific area of the filesystem belonging to them known as their <strong>home directory</strong> in which they are initially placed when they log on. Armed with a basic knowledge of the structure of the filesystem, each user is free to explore and visit almost any area of the system unless it has been specifically protected by its owner.</p>
+<p id="cd">To move around the filesystem the <a class="reference external" href="http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cd.html">command</a> <tt class="docutils literal"><span class="pre">cd</span></tt> <a class="footnote-reference" href="#id8" id="id2">[1]</a>, for change directory is generally used, for example:</p>
+<div class="highlight-python"><pre>berlin% cd /</pre>
+</div>
+<p>which will (once you hit the return key to execute the command) change your location, your &#8216;working directory&#8217; to the root directory <tt class="docutils literal"><span class="pre">/</span></tt>. A few things to pay attention to when first coming across this:</p>
+<ul class="simple">
+<li>first, there is space (&#8216;white space&#8217; as we call it) between the command <tt class="docutils literal"><span class="pre">cd</span></tt> and the &#8216;argument&#8217; <tt class="docutils literal"><span class="pre">/</span></tt>. This is one or more spaces or tab characters so that the shell can understand that you want to run the command <tt class="docutils literal"><span class="pre">cd</span></tt> and give it some extra information (where to change directory to in this case), rather than, for example typing <tt class="docutils literal"><span class="pre">cd/</span></tt> in which case the shell will interpret <tt class="docutils literal"><span class="pre">cd/</span></tt> as the command you are trying to run;</li>
+<li>second, if you think about what you want to achieve with the command, (change directory to somewhere) it should be quite apparent that apart from the command, you also need to give the shell an indication of where you want to go (<tt class="docutils literal"><span class="pre">/</span></tt> here) so you (normally) will have to type <tt class="docutils literal"><span class="pre">cd</span> <span class="pre">somewhere</span></tt> where <tt class="docutils literal"><span class="pre">somewhere</span></tt> is where you want to go. When you are first using these commands, pausing and thinking about what you want to achive is particularly important. Later, it will generally become second nature (as when you learn any new language).</li>
+</ul>
+<p>Now, if you type:</p>
+<div class="highlight-python"><pre>berlin% cd home/plewis</pre>
+</div>
+<p>You will change directory to the subdirectory <tt class="docutils literal"><span class="pre">plewis</span></tt> of the subdirectory <tt class="docutils literal"><span class="pre">home</span></tt> of <tt class="docutils literal"><span class="pre">/</span></tt>, which is the same as doing (using an absolute pathname):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">berlin</span><span class="o">%</span> <span class="n">cd</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">plewis</span>
+</pre></div>
+</div>
+<p>These <em>look</em> similar at first glance, but the second importantly has a <tt class="docutils literal"><span class="pre">/</span></tt> at the front of the directory name, and so is an <strong>absolute</strong> pathname, whereas the first does not, so it is a <strong>relative</strong> pathname.</p>
+<p>The idea should be simple and intuitive once you get the idea of <tt class="docutils literal"><span class="pre">/</span></tt> being a separator and <tt class="docutils literal"><span class="pre">/</span></tt> being the top of the directory tree (the root directory).</p>
+<p>You should practice moving around the file system. <strong>Try examples such as moving from your own home directories to that of your neighbour in the class, using relative and absolute filenames.</strong></p>
+<p id="pwd">With all these <tt class="docutils literal"><span class="pre">cd</span></tt> exercises you might easily lose track of where you are. The command that returns the name of the current working directory (i.e. where you are) is <tt class="docutils literal"><span class="pre">pwd</span></tt> (print working directory):</p>
+<div class="highlight-python"><pre>berlin% cd /home/mdisney/../plewis
+berlin% pwd
+/home/plewis</pre>
+</div>
+<p id="id3">Since your home directory is somewhere you will want to refer to quite often, there is a special symbol <tt class="docutils literal"><span class="pre">~</span></tt> (the tilde symbol, often called twiddle). So:</p>
+<div class="highlight-python"><pre>berlin% cd ~</pre>
+</div>
+<p>should change directory to your home:</p>
+<div class="highlight-python"><pre>berlin% cd ~
+berlin% pwd
+/home/plewis</pre>
+</div>
+<p>You refer to the home of a particular user with the <tt class="docutils literal"><span class="pre">~</span></tt> symbol as well, so <tt class="docutils literal"><span class="pre">~plewis</span></tt> refers to the hom of the user <tt class="docutils literal"><span class="pre">plewis</span></tt>.</p>
+<p><strong>Make use of</strong> <tt class="docutils literal"><span class="pre">~</span></tt> <strong>to change to the home directory of your neighbour, check where you are with the appropriate command, and confirm that it is what you expected.</strong></p>
+<p id="id4">Another useful symbol is <tt class="docutils literal"><span class="pre">.</span></tt> (&#8216;dot&#8217;) which stands for the current directory, so:</p>
+<div class="highlight-python"><pre>berlin% cd ~plewis/.
+berlin% pwd
+/home/plewis
+berlin% cd .
+berlin% pwd
+/home/plewis</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">.</span></tt> apparently does nothing, but really it just changes directory to be where we are now. This might not seem very useful, but we will find it useful later.</p>
+<p id="ls">The next command to introduce is <tt class="docutils literal"><span class="pre">ls</span></tt> (list) which produces a list of directory contents:</p>
+<div class="highlight-python"><pre>berlin% cd ~mdisney
+berlin% ls
+DATA        Desktop
+Documents   Downloads</pre>
+</div>
+<p>By default, this will show you all (nearly all) the files and directories where you are now. You can get a listing of another directory (or file) by using that directory (or file) as an argument to the command, e.g.:</p>
+<div class="highlight-python"><pre>berlin% ls ~plewis/public_html/eoldas/</pre>
+</div>
+<p>This is the same <tt class="docutils literal"><span class="pre">ls</span></tt> command as previously, but we have used a more complex construct for where we want it to provide a listing of. The directories referred to are in the subdirectory <tt class="docutils literal"><span class="pre">eoldas</span></tt> of the subdirectory <tt class="docutils literal"><span class="pre">public_html</span></tt> of the home of <tt class="docutils literal"><span class="pre">plewis</span></tt> (<tt class="docutils literal"><span class="pre">~plewis</span></tt>).</p>
+</div>
+</div>
+<div class="section" id="making-and-breaking-things">
+<h2>3.3. Making and breaking things<a class="headerlink" href="#making-and-breaking-things" title="Permalink to this headline">¶</a></h2>
+<p>So, we understand the structure of the filesystem, we have come across some of the Unix symbols (<tt class="docutils literal"><span class="pre">~</span></tt>, <tt class="docutils literal"><span class="pre">.</span></tt>, <tt class="docutils literal"><span class="pre">..</span></tt>), we can change directory, and we can get a listing of files or directories. That&#8217;s not far off the minimum set of concepts that you need for using Unix, but we still don&#8217;t know how to move or copy data around or how to make our own directories.</p>
+<p id="mkdir">To make a directory, you use the command <tt class="docutils literal"><span class="pre">mkdir</span></tt> and then provide the name of the directory you want to create. You can only make directories (or copy or move files) where you have permission to do so, so we should first <tt class="docutils literal"><span class="pre">cd</span></tt> to the subdirectory <tt class="docutils literal"><span class="pre">DATA</span></tt> in your home directory:</p>
+<div class="highlight-python"><pre>berlin% cd ~/DATA
+berlin% mkdir someStuff</pre>
+</div>
+<p>This will make the directory <tt class="docutils literal"><span class="pre">~/DATA/someStuff</span></tt>. Check that that has happened (e.g. list what is in <tt class="docutils literal"><span class="pre">~/DATA/</span></tt>) and then change directory to this new location:</p>
+<div class="highlight-python"><pre>berlin% cd ~/DATA/someStuff</pre>
+</div>
+<p id="rmdir">You can remove an <strong>empty</strong> directory with the command <tt class="docutils literal"><span class="pre">rmdir</span></tt>.</p>
+<p><strong>Try creating some new directory, check that it is as you expect (with ``ls`` or ``cd`` and ``pwd``), then try deleting it with ``rmdir``. Remember that the directory has to be empty to use this command. There are other ways of deleting directories and their contents that we will come across a little later.</strong></p>
+<p id="cp">The command <a class="reference external" href="http://en.wikipedia.org/wiki/Cp_unix">for copying a file is</a> <tt class="docutils literal"><span class="pre">cp</span></tt>, e.g.:</p>
+<div class="highlight-python"><pre>berlin% cp ~plewis/msc/hello.dat .</pre>
+</div>
+<p><strong>Check that the file has been correctly copied using an appropriate command</strong>.
+Note the &#8216;dot&#8217; <tt class="docutils literal"><span class="pre">.</span></tt> here: we are telling the command <tt class="docutils literal"><span class="pre">cp</span></tt> to copy the file <tt class="docutils literal"><span class="pre">~plewis/msc/hello.dat</span></tt> to the current directory <tt class="docutils literal"><span class="pre">.</span></tt>. Note also the whitespace between the command <tt class="docutils literal"><span class="pre">cp</span></tt> and the two arguments <tt class="docutils literal"><span class="pre">~plewis/msc/hello.dat</span></tt> and <tt class="docutils literal"><span class="pre">.</span></tt>.
+A common mistake people make when first using this command is not giving two (actually, two or more) arguments, but if you think about what information you would need to give to the computer to copy a file from somewhere to somewhere else, you will soon learn that you need at least two arguments.</p>
+<p id="id5">We can copy more than one file at a time using wildcard characters. The one you are likely to come across most often is <tt class="docutils literal"><span class="pre">*</span></tt> which stands for &#8216;zero or more characters&#8217; in a filename or directory name. To explore this, lets first get a listing of all of the files that end with <tt class="docutils literal"><span class="pre">.dat</span></tt> in the directory <tt class="docutils literal"><span class="pre">~plewis/msc</span></tt>:</p>
+<div class="highlight-python"><pre>berlin% ls ~plewis/msc/*.dat
+/home/plewis/msc/atm.dat      /home/plewis/msc/header.dat      /home/plewis/msc/max.dat
+/home/plewis/msc/country.dat  /home/plewis/msc/hello.dat       /home/plewis/msc/points.dat
+/home/plewis/msc/dem.dat      /home/plewis/msc/helloWorld.dat  /home/plewis/msc/popden.dat
+/home/plewis/msc/forest.dat   /home/plewis/msc/landsat.dat
+/home/plewis/msc/head.dat     /home/plewis/msc/listing.dat</pre>
+</div>
+<p id="id6">Here, we have used the wildcard to specify a set of files that follow a pattern (<tt class="docutils literal"><span class="pre">*.dat</span></tt>). We can use another wildcard <tt class="docutils literal"><span class="pre">?</span></tt>
+to get more subtle control. This stands for &#8216;one character&#8217;, so:</p>
+<div class="highlight-python"><pre>berlin% ls ~plewis/msc/???.dat
+/home/plewis/msc/atm.dat  /home/plewis/msc/dem.dat  /home/plewis/msc/max.dat</pre>
+</div>
+<p>refers to files with any three characters, followed by <tt class="docutils literal"><span class="pre">.dat</span></tt>.</p>
+<p>If we wanted all the files that start with <tt class="docutils literal"><span class="pre">h</span></tt> and end <tt class="docutils literal"><span class="pre">.dat</span></tt> we could use:</p>
+<div class="highlight-python"><pre>berlin% ls ~plewis/msc/h*.dat
+/home/plewis/msc/head.dat    /home/plewis/msc/hello.dat
+/home/plewis/msc/header.dat  /home/plewis/msc/helloWorld.dat</pre>
+</div>
+<p>To copy multiple files to the same place then, we could simply list the names:</p>
+<div class="highlight-python"><pre>berlin% cp  ~plewis/msc/hello.dat ~plewis/msc/helloWorld.dat .</pre>
+</div>
+<p><strong>Don&#8217;t forget the</strong> <tt class="docutils literal"><span class="pre">.</span></tt> <strong>here, or you be asking it to copy</strong> <tt class="docutils literal"><span class="pre">~plewis/msc/hello.dat</span></tt> <strong>to</strong> <tt class="docutils literal"><span class="pre">~plewis/msc/helloWorld.dat</span></tt> <strong>!!</strong>.</p>
+<p>However, you should be able to use wildcards to achieve this more simply.</p>
+<p><strong>Do that now. Make a new directory called e.g.</strong> <tt class="docutils literal"><span class="pre">~/DATA/cpTest</span></tt> and copy the files** <tt class="docutils literal"><span class="pre">hello.dat</span></tt> and <tt class="docutils literal"><span class="pre">helloWorld.dat</span></tt> <strong>to the new directory, and check that they are there.</strong></p>
+<p id="ls-l">You can generally modify the behaviour of a Unix command by using command line options. The basic style of this is a minus character then a single letter or double minus characters then some word, but this pattern is not always strictly adhered to. A useful option for the command <tt class="docutils literal"><span class="pre">ls</span></tt> is <tt class="docutils literal"><span class="pre">-l</span></tt> which gives a long listing (i.e. more details about what it finds). The result will be something of the form:</p>
+<div class="highlight-python"><pre>berlin% ls -l ~plewis/public_html/eoldas/
+total 652
+drwxrwxr-x 3 plewis plewis  4096 Sep 14 19:28 _images/
+drwxrwxr-x 2 plewis plewis  4096 Sep 14 17:52 _sources/
+drwxrwxr-x 2 plewis plewis  4096 Sep 14 17:52 _static/
+-rw-rw-r-- 1 plewis plewis 26117 Sep 14 17:52 atmos.html
+-rw-rw-r-- 1 plewis plewis 19023 Sep 14 17:52 eoldas_ConfFile.html</pre>
+</div>
+<p>This displays information on the owner of a file (<tt class="docutils literal"><span class="pre">plewis</span></tt> here), the size of the file (e.g. <tt class="docutils literal"><span class="pre">~plewis/public_html/eoldas/atmos.html</span> <span class="pre">is</span> <span class="pre">26117</span> <span class="pre">bytes,</span> <span class="pre">which</span> <span class="pre">is</span> <span class="pre">25.5</span> <span class="pre">KB),</span> <span class="pre">and</span> <span class="pre">when</span> <span class="pre">it</span> <span class="pre">was</span> <span class="pre">last</span> <span class="pre">modified</span> <span class="pre">(``Sep</span> <span class="pre">14</span> <span class="pre">17:52</span></tt>). The first field that you see (e.g. <tt class="docutils literal"><span class="pre">drwxrwxr-x</span></tt>) is a series of codes that tells you about what type of file it is (<tt class="docutils literal"><span class="pre">d</span></tt> in the first element means that it is a directory) then there are three sets of three elements that may be set to <tt class="docutils literal"><span class="pre">rwx</span></tt> or unset as in <tt class="docutils literal"><span class="pre">---</span></tt>. These refer to read <tt class="docutils literal"><span class="pre">r</span></tt>, write <tt class="docutils literal"><span class="pre">w</span></tt> and execute <tt class="docutils literal"><span class="pre">x</span></tt> permissions for this file, so that if you see e.g. <tt class="docutils literal"><span class="pre">rw-</span></tt> that means that read and write permission are set but not execute.  Note that directories have the <tt class="docutils literal"><span class="pre">x</span></tt> bit set if you are to be able to see into that directory, but you will not generally alter that.</p>
+<p><strong>Use</strong> <tt class="docutils literal"><span class="pre">ls</span> <span class="pre">-l</span></tt> <strong>to check that the file sizes of</strong> <tt class="docutils literal"><span class="pre">hello.dat</span></tt> <strong>and</strong> <tt class="docutils literal"><span class="pre">helloWorld.dat</span></tt> <strong>are the same as they were in the place you copied them from (**``~plewis/msc``</strong>)**.</p>
+<p>The three sets of <tt class="docutils literal"><span class="pre">rwx</span></tt> bits that you saw when you used <tt class="docutils literal"><span class="pre">ls</span> <span class="pre">-l</span></tt> refer to permissions for different users of the system. The first is for the owner (<tt class="docutils literal"><span class="pre">plewis</span></tt> in this case). The second is for people in the same group as the owner (to enable sharing). The third is for the rest of the world. So, if we saw the file permissions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">rwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>
+</pre></div>
+</div>
+<p>this would mean that everyone can read and execute this file (execution means that it is a &#8216;program&#8217; that we can &#8216;run&#8217;), but only the owner has write permission.</p>
+<p id="chmod">An obvious question at this point is &#8216;how do I change file permissions?&#8217;. This is generally done with the <a class="reference external" href="http://en.wikipedia.org/wiki/Chmod">the command</a> <tt class="docutils literal"><span class="pre">chmod</span></tt>.
+This command can be used in a number of ways, one is e.g.:</p>
+<div class="highlight-python"><pre>berlin% chmod +r hello.dat</pre>
+</div>
+<p>to add read permission (similarly for <tt class="docutils literal"><span class="pre">+w</span></tt> or <tt class="docutils literal"><span class="pre">+x</span></tt>), or <tt class="docutils literal"><span class="pre">-r</span></tt> etc. to remove read permission. You can do this for specific sets (user, group, others (not in group) and all users) through specifying one or more of <tt class="docutils literal"><span class="pre">ugoa</span></tt>, so:</p>
+<div class="highlight-python"><pre>berlin% chmod a-r hello.dat</pre>
+</div>
+<p>would remove write permission for all users but:</p>
+<div class="highlight-python"><pre>berlin% chmod u+r hello.dat</pre>
+</div>
+<p>would restore it for the user (the owner).</p>
+<p>An alternative mechanism for achieving this is to see the information in <tt class="docutils literal"><span class="pre">rwxrwxrwx</span></tt> as octal (base 8) bit fields, so if wanted to set the permissions to <tt class="docutils literal"><span class="pre">rwxr-xr-x</span></tt> this would be 866, or <tt class="docutils literal"><span class="pre">rw-r--r--</span></tt> would be 644. It is often useful to use <tt class="docutils literal"><span class="pre">chmod</span></tt> in this way.</p>
+<p id="rm">We know how to copy files, so next we need to know how to delete them. This is done with the command <tt class="docutils literal"><span class="pre">rm</span></tt> (<a class="reference external" href="http://en.wikibooks.org/wiki/Guide_to_Unix/Commands/File_System_Utilities#rm">remove</a>). For example, to remove (delete) the file <tt class="docutils literal"><span class="pre">~/DATA/someStuff/hello.dat</span></tt> we simply type:</p>
+<div class="highlight-python"><pre>berlin% rm ~/DATA/someStuff/hello.dat</pre>
+</div>
+<p id="rm-i"><span id="alias"></span><em>Sometimes</em> this may ask you for confirmation, i.e. &#8216;do you <em>really</em> want to remove this file?&#8217;) which is something we often put on for new users. This is to stop you accidently removing important files, but when you get used to Unix, you can get rid of that annoyance. When this occurs, what is actually happening is that when you type <tt class="docutils literal"><span class="pre">rm</span></tt> it is interpreted as <tt class="docutils literal"><span class="pre">rm</span> <span class="pre">-i</span></tt>, i.e. we have switched on the <tt class="docutils literal"><span class="pre">-i</span></tt> option to <tt class="docutils literal"><span class="pre">rm</span></tt> (which is what causes this checking to be invoked). This is known as <em>aliasing</em> whereby a command is translated through an alias. You can get a full list of aliased commands by typing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">berlin</span><span class="o">%</span> <span class="n">alias</span>
+</pre></div>
+</div>
+<p>After you are used to using Unix, you can customise your own aliases. For the moment, we will note that you can <em>unalias</em> a command using <tt class="docutils literal"><span class="pre">unalias</span></tt>, e.g.:</p>
+<div class="highlight-python"><pre>berlin% unalias rm</pre>
+</div>
+<p id="backslash">or alternatively, you can &#8216;<em>escape</em>&#8216; the alias by preceeding the <tt class="docutils literal"><span class="pre">rm</span></tt> command with a backslash character <tt class="docutils literal"><span class="pre">\</span></tt>:</p>
+<div class="highlight-python"><pre>berlin% \rm ~/DATA/someStuff/hello.dat</pre>
+</div>
+<p id="rm-f">Another useful option for <tt class="docutils literal"><span class="pre">rm</span></tt> is <tt class="docutils literal"><span class="pre">rm</span> <span class="pre">-f</span></tt> which &#8216;forces&#8217; a remove, even if what you are asking it to remove doesn&#8217;t exist, e.g.:</p>
+<div class="highlight-python"><pre>berlin% rm -f somethingThatDoesntExist.dat</pre>
+</div>
+<p id="rm-r">Finally for <tt class="docutils literal"><span class="pre">rm</span></tt> for the moment, the option <tt class="docutils literal"><span class="pre">-r</span></tt> allows you to do a recursive delete (i.e. all directories, subdirectories and their contents). This can be a little dangerous for novice users as you might accidentally delete a whole load of things you didn&#8217;t mean to, but it is worth knowing about and practicing with. Type the following and make sure you understand what each command is doing:</p>
+<div class="highlight-python"><pre>berlin% mkdir ~/DATA/newStuff
+berlin% cp ~plewis/msc/*dat ~/DATA/newStuff
+berlin% ls -l ~/DATA/newStuff/
+berlin% \rm -r  ~/DATA/newStuff</pre>
+</div>
+<p id="cp-r">Whilst of the subject of recursion, we note the <tt class="docutils literal"><span class="pre">-R</span></tt> option to <tt class="docutils literal"><span class="pre">cp</span></tt> which allows a recursive copy, e.g.:</p>
+<div class="highlight-python"><pre>berlin% mkdir ~/DATA/newStuff
+berlin% cp -R ~plewis/msc  ~/DATA/newStuff</pre>
+</div>
+<p>would do a recursive copy of everything in <tt class="docutils literal"><span class="pre">~plewis/msc</span></tt>, including subdirectories, into the directory  <tt class="docutils literal"><span class="pre">~/DATA/newStuff</span></tt> <a class="footnote-reference" href="#id9" id="id7">[2]</a>.</p>
+<p id="mv">We know how to <em>copy</em> a file from one place to another, but not how to <em>move</em> them. In fact the concept of moving (on the computer) is essentially the same as <em>renaming</em>. To move or rename a file in Unix, we use the command <tt class="docutils literal"><span class="pre">mv</span></tt>:</p>
+<div class="highlight-python"><pre>berlin% mkdir ~/DATA/newStuff
+berlin% cp ~plewis/msc/h*dat ~/DATA/newStuff
+berlin% mv ~/DATA/newStuff/hello.dat  ~/DATA/newStuff/helloo.dat</pre>
+</div>
+<p>Check what has happened using <tt class="docutils literal"><span class="pre">ls</span></tt>. You should notice that the file that was called <tt class="docutils literal"><span class="pre">~/DATA/newStuff/hello.dat</span></tt> is now called <tt class="docutils literal"><span class="pre">~/DATA/newStuff/helloo.dat</span></tt>. As a clearer example of moving a file:</p>
+<div class="highlight-python"><pre>berlin% mkdir ~/DATA/newStuff2
+berlin% mv ~/DATA/newStuff/helloWorld.dat ~/DATA/newStuff2</pre>
+</div>
+<p>Again, check what has happened here using <tt class="docutils literal"><span class="pre">ls</span></tt> or <tt class="docutils literal"><span class="pre">ls</span> <span class="pre">-l</span></tt>.</p>
+<p id="df">As the last of these <em>introductory</em> commands, we will introduce one to tell you how much disk space is free. This is <tt class="docutils literal"><span class="pre">df</span></tt> (<a class="reference external" href="http://en.wikipedia.org/wiki/Df_%28Unix%29">disk free</a>). A typical example of this is:</p>
+<div class="highlight-python"><pre>berlin% df -h .</pre>
+</div>
+<p>where the option <tt class="docutils literal"><span class="pre">-h</span></tt> asks for the information in &#8216;human readable&#8217; format (rather than the default 1 KB blocks) and <tt class="docutils literal"><span class="pre">.</span></tt> (dot) refers to the current directory (the current filesystem in this case). Ones you might be particularly interested in are your home disk and your DATA disk:</p>
+<div class="highlight-python"><pre>berlin% df -h ~ ~/DATA
+Filesystem            Size  Used Avail Use% Mounted on
+128.40.214.15:/home1/research/plewis
+                  4.0G  3.6G  327M  92% /home/plewis
+128.40.214.90:/export/raid_0
+                  129G  127G   39M 100% /data/rsu_raid_0</pre>
+</div>
+<p id="quota">In the example here, <tt class="docutils literal"><span class="pre">/home1/research/plewis</span></tt> is of size 4 GB, but 3.6 GB are used (so there is not much space left). On the DATA disk, the disk is larger (129GB) but 127 GB are used (again, not much space). In Remote Sensing, you may well be using large files, so you need to keep an eye on your disk usage. In fact, on the UCL Geography system, we put a quota on your home directory
+which limits the size of data you can keep in there. If you over-run your quota or get near to filling it, you can find some unexpected behaviour when you use the system. This might include not being able to log in. You can check where you are on your quota with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">berlin</span><span class="o">%</span> <span class="n">quota</span> <span class="o">-</span><span class="n">v</span>
+</pre></div>
+</div>
+<p>If you find one day that you are unable to log in via the windowing system to the Unix machines, this is <strong>most likely</strong>  because you have gone over your quota. To fix it, you will need to log in remotely (next session) and delete or move files that shouldn&#8217;t be there.</p>
+<p>To avoid this, <strong>you should keep all of your data in the DATA directory</strong> (suitably organised into subdirectories if you don&#8217;t want to get confused). The <tt class="docutils literal"><span class="pre">home</span></tt> are is regularly backed up, but the data are is not. However, the data area runs on RAID disks and so should normally be recoverable should teh system go down. We do not keep very frequent backups of the data areas however, so if you delete files, they will generally be gone (so be careful with <tt class="docutils literal"><span class="pre">rm</span> <span class="pre">-r</span></tt>!!).</p>
+</div>
+<div class="section" id="summary">
+<h2>3.4. Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>In this section, you have been introduced to what is pretty much the basic set of Unix concepts you will need to use any Unix-like system (file system, relative and absolute filenames, special symbols and a base set of commands). You will need to become familiar with these, but we do appreciate that it takes time and prictice to do this. You should bear in mind that the commands that you have been shown here are the core tools that you would need on any system to navigate your way around the computer system, to make or remove directories, or to copy or move files. Learning these basics is the one major overhead of Unix, but once you know them, you can make more powerful use of the computer.</p>
+<p>As a reminder, the Unix commands learned here were:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#alias">alias</a>] [<a class="reference internal" href="#cd">cd</a>] [<a class="reference internal" href="#chmod">chmod</a>] [<a class="reference internal" href="#cp">cp</a>] [<a class="reference internal" href="#df">df</a>] [<a class="reference internal" href="#ls">ls</a>] [<a class="reference internal" href="#mkdir">mkdir</a>] [<a class="reference internal" href="#mv">mv</a>] [<a class="reference internal" href="#pwd">pwd</a>] [<a class="reference internal" href="#quota">quota</a>] [<a class="reference internal" href="#rm">rm</a>] [<a class="reference internal" href="#rmdir">rmdir</a>]</div></blockquote>
+<p>with a few options:</p>
+<blockquote>
+<div>[<a class="reference internal" href="#cp-r">cp-R</a>] [<a class="reference internal" href="#ls-l">ls-l</a>] [<a class="reference internal" href="#rm-f">rm-f</a>] [<a class="reference internal" href="#rm-i">rm-i</a>] [<a class="reference internal" href="#rm-r">rm-r</a>]</div></blockquote>
+<p>The Unix symbols we come across are:</p>
+<blockquote>
+<div>[<tt class="docutils literal"><span class="pre">/</span></tt>: <a class="reference internal" href="#slash">slash</a>] [<tt class="docutils literal"><span class="pre">\</span></tt>: <a class="reference internal" href="#backslash">backslash</a>] [dotdot: <a class="reference internal" href="#id1">..</a>] [dot: <a class="reference internal" href="#id4">.</a>] [tilde/twiddle: <a class="reference internal" href="#id3">~</a>] [star/wildcard: <a class="reference internal" href="#id5">*</a>] [single wildcard: <a class="reference internal" href="#id6">?</a>]</div></blockquote>
+<p>You will need to practice using these to become familiar with them, and you will need to become familiar with them for the rest of the course, so you need
+to put the time in early on to do this.</p>
+<p>In the next section, we will move onto a few more &#8216;advanced&#8217; Unix concepts and introduce some useful tools to you.</p>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>An often useful more advanced alternative is the <a class="reference external" href="http://en.wikipedia.org/wiki/Pushd_and_popd">pair of commands</a> <tt class="docutils literal"><span class="pre">pushd</span></tt> and  <tt class="docutils literal"><span class="pre">popd</span></tt>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[2]</a></td><td>Often, using the command <tt class="docutils literal"><span class="pre">tar</span></tt> (which stands for &#8216;tape archive&#8217;, but really is a general archiving command) can be useful for this, but it can be <a class="reference external" href="http://en.wikipedia.org/wiki/Tar_%28Unix%29">inefficient on some (Windows) systems</a> and some people don&#8217;t like too many pipes (we will learn pipes in the next section). You can achieve the above <tt class="docutils literal"><span class="pre">cp</span> <span class="pre">-R</span></tt> command with <cite>tar</cite> with the command: <tt class="docutils literal"><span class="pre">berlin%</span> <span class="pre">cd</span> <span class="pre">~plewis;</span> <span class="pre">tar</span> <span class="pre">cvzf</span> <span class="pre">msc</span> <span class="pre">|</span> <span class="pre">(cd</span> <span class="pre">~/DATA/newStuff;</span> <span class="pre">tar</span> <span class="pre">xvzf</span> <span class="pre">-)</span></tt> which looks a lot more complex, but has the advantage of compressing the data whilst copying it. It will also maintain the original modification date information for the files.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. A Brief Introduction to Unix</a><ul>
+<li><a class="reference internal" href="#what-is-unix">3.1. What is Unix?</a><ul>
+<li><a class="reference internal" href="#workstations-and-networks">3.1.1. Workstations and networks</a></li>
+<li><a class="reference internal" href="#accounts-and-passwords">3.1.2. Accounts and passwords</a></li>
+<li><a class="reference internal" href="#logging-in">3.1.3. Logging in</a></li>
+<li><a class="reference internal" href="#the-command-line">3.1.4. The command line</a></li>
+<li><a class="reference internal" href="#logging-out">3.1.5. Logging out</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-unix-file-system">3.2. The UNIX file system</a><ul>
+<li><a class="reference internal" href="#absolute-and-relative-path-names">3.2.1. Absolute and relative path names</a></li>
+<li><a class="reference internal" href="#negotiating-the-file-system">3.2.2. Negotiating the file system</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#making-and-breaking-things">3.3. Making and breaking things</a></li>
+<li><a class="reference internal" href="#summary">3.4. Summary</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structure.html"
+                        title="previous chapter">2. Structure of the Course</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unix_two.html"
+                        title="next chapter">4. Some more Unix and associated tools</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/unix_intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="unix_two.html" title="4. Some more Unix and associated tools"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structure.html" title="2. Structure of the Course"
+             >previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Prof. P. Lewis, Prof. J. French.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

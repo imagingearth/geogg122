@@ -1,0 +1,143 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>7. Numerical and Scientific Python and Data Visualisation &mdash; GeogG122 v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GeogG122 v1.0 documentation" href="index.html" />
+    <link rel="next" title="8. Random Digital Elevation Model" href="dem1.html" />
+    <link rel="prev" title="6. Writing and Debugging Python Code" href="python102.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="dem1.html" title="8. Random Digital Elevation Model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="python102.html" title="6. Writing and Debugging Python Code"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="numerical-and-scientific-python-and-data-visualisation">
+<h1>7. Numerical and Scientific Python and  Data Visualisation<a class="headerlink" href="#numerical-and-scientific-python-and-data-visualisation" title="Permalink to this headline">¶</a></h1>
+<p>We have previously seen some of the main examples of the core data types in Python: <a class="reference external" href="python101.html?highlight=string#strings">strings</a> for text, <a class="reference external" href="python101.html?highlight=integer#integer">integer</a> and <a class="reference external" href="python101.html?highlight=float#float">float</a> for numerical representation; <a class="reference external" href="python101.html?highlight=boolean#boolean">boolean</a> for logical representation; and <a class="reference external" href="python101.html?highlight=dict#dict">dictionaries</a> and <a class="reference external" href="python101.html?highlight=list#lists">lists</a> as ways of grouping sets of (potentially different) data types together.</p>
+<p>Very often in scientific programming, we wish to perform operations on sets containing the same data type, for instance vectors or matrices of floating point numbers. Of course we can use dictionaries or lists to do this, but they lack some of the general functionality we would normally need. The main package in Python for dealing with numerical manipulation then, is <a class="reference external" href="http://numpy.scipy.org/">numpy</a> which is often used together with <a class="reference external" href="http://www.scipy.org/">scipy</a>. There are many resources built around these packages, and many tutorials available, such as <a class="reference external" href="http://www.scipy.org/Tentative_NumPy_Tutorial">the one from scipy for numpy</a> and the <a class="reference external" href="http://www.scipy.org/Cookbook">scipy cookbook</a>.
+A complete course in <a class="reference external" href="http://scipy-lectures.github.com/index.html">Scientific Python</a> is also available. It is up to you to make use of these various resources to back up what we cover in these classes, for further learning, and for general reference.</p>
+<p>We strongly recommend that you go through some of these in your own time. At the very least, be aware that there are such resources to help you develop what you can do with these (and other) packages.</p>
+<p>Tools to enable you to visualise data are available in a number of packages, but one of the most common ones is <a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> or the slightly different philosophy of <a class="reference external" href="http://www.scipy.org/PyLab">pylab</a>. These have very good help pages, but to start with, you might find the <a class="reference external" href="http://matplotlib.sourceforge.net/gallery.html">gallery of different examples</a> most useful.</p>
+<p>Anyone who has come across matlab before will notice a good deal of similarity between matplotlib (and indeed, elements of numpy) and matlab. Some of the advantages of using the Python packages over matlab are <a class="reference external" href="http://en.wikipedia.org/wiki/Matplotlib#Comparison_with_MATLAB">given here</a> but <a class="reference external" href="http://brenocon.com/blog/2009/02/comparison-of-data-analysis-packages-r-matlab-scipy-excel-sas-spss-stata/">there is much debate around these things</a> and of course there are many tools developed around matlab that you may wish to use at some point. One key advantage of the Python packages over matlab for many users is that it is open source, but another viable open source toolset for many of the things we will do here is <a class="reference external" href="http://www.r-project.org/">R</a>. Rather than attempting to &#8216;teach&#8217; you all of these tools and packages, it is preferable that we settle on one main one (Python and its packages here) and provide you pointers to how you might use what you learn here in other languages/tools. On the subject of R, we note here that there is a Python interface to R called <a class="reference external" href="http://rpy.sourceforge.net/">RPy</a>.</p>
+<p>To help appreciate some of the similarities and differences, and to help you transliterate between one language and another, there are several web resources that you might find useful, including <a class="reference external" href="http://www.scipy.org/NumPy_for_Matlab_Users">NumPy for Matlab Users</a>, A &#8216;crib sheet&#8217; covering basic equivalences between matlab/octave, python and R is <a class="reference external" href="http://www.google.co.uk/url?sa=t&amp;source=web&amp;cd=3&amp;ved=0CDcQFjAC&amp;url=http%3A%2F%2Fmathesaurus.sourceforge.net%2Fmatlab-python-xref.pdf&amp;rct=j&amp;q=matlab%20python&amp;ei=Jft6TvPXM9Ka1AWm1b2jAw&amp;usg=AFQjCNGmSeFre2HxLxev8ZX1DCfBeXgRSQ&amp;sig2=-ysrvcJGr4ogqQDjlb7PLA&amp;cad=rja">available as a pdf</a> , or a more general &#8216;Mathesaurus&#8217; provided <a class="reference external" href="http://mathesaurus.sourceforge.net/">here</a>.</p>
+<p>An additional piece of software to consider and keep an eye on as it develops is <a class="reference external" href="http://sage.math.washington.edu/sage/">sage</a> which is a general open source mathematics software, with a Python-based interface.</p>
+<div class="section" id="in-this-session">
+<h2>7.1. In this session<a class="headerlink" href="#in-this-session" title="Permalink to this headline">¶</a></h2>
+<p>In this session then, we will <em>not</em> attempt to take you through all of the features of scipy, numpy and matplotlib. Instead, we will develop some examples where we build simple environmental models that you can use.</p>
+<p>We will introduce the following new topics:</p>
+<p>we will also come across the following:</p>
+</div>
+<div class="section" id="a-simple-bit-of-image-processing">
+<h2>7.2. A Simple bit of Image Processing<a class="headerlink" href="#a-simple-bit-of-image-processing" title="Permalink to this headline">¶</a></h2>
+<p>All of the above is, in one sense just context. What you <em>want</em> to be able to do is get on and write some useful code so that you can explore some interesting data or model. With that in mind, we will now develop some code for a simple environmental model.</p>
+<p>We will start however with some image processing. For the model we build later, we will want to have a representation of a Digital Elevation model (a DEM) and have the ability to: (i) smooth it; (ii) find the slope. We also want to be able to generate a random DEM (for testing it), so lets start there.</p>
+<p>We can generate a random DEM by simply generating a 2D array of random numbers using numpy, and correlating this random field with a smoothing filter. Lets generate the random array first:</p>
+</div>
+<div class="section" id="summary">
+<h2>7.3. Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>In this session, we have seen some examples of developing environmental models in Python, making use of numpy, scipy and matplotlib. As we stated in the introduction, these notes are not supposed to provide exhaustive coverage of what you can do with those packages, but rather to take you through a few relevant examples. You should make use of the plethora of examples and help pages available on the web for developing your own codes.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">7. Numerical and Scientific Python and  Data Visualisation</a><ul>
+<li><a class="reference internal" href="#in-this-session">7.1. In this session</a></li>
+<li><a class="reference internal" href="#a-simple-bit-of-image-processing">7.2. A Simple bit of Image Processing</a></li>
+<li><a class="reference internal" href="#summary">7.3. Summary</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="python102.html"
+                        title="previous chapter">6. Writing and Debugging Python Code</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dem1.html"
+                        title="next chapter">8. Random Digital Elevation Model</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/pythonmodel.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="dem1.html" title="8. Random Digital Elevation Model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="python102.html" title="6. Writing and Debugging Python Code"
+             >previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Prof. P. Lewis, Prof. J. French.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

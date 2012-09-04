@@ -1,0 +1,333 @@
+Improving and extending the DEM code
+====================================
+
+In this section, we will tidy up the DEM generation code, grouping items into functions.
+
+Introduction
+------------
+Whilst the previous version of the code we generated was ok and worked, its a very ugly and poorly organised. ne way to take this would be to group together some of the parts that 'go together' functionally into methods. This is quite easy to achieve:, first by defining a set of functions or methods. This could be:
+
+<<>>=
+#!/usr/bin/env python
+import numpy as np
+
+def gaussianFilter(sizex,sizey=None,scale=0.333):
+    '''
+    Generate and return a 2D Gaussian function
+    of dimensions (sizex,sizey)
+
+    If sizey is not set, it defaults to sizex
+    A scale can be defined to widen the function (default = 0.333)
+    '''
+    sizey = sizey or sizex
+    x, y = np.mgrid[-sizex:sizex+1, -sizey:sizey+1]
+    g = np.exp(-scale*(x**2/float(sizex)+y**2/float(sizey)))
+    return g/g.sum()
+
+def randomDEM(nx,sizex,max,min,sizey=None,ny=None):
+    '''
+    Generate a pseudo-DEM from random correlated noise.
+
+    Parameters:
+        nx	:	number of pixels of the output 
+	sizex	: 	number of pixels of the smoothing filter
+  	max	:	max height in DEM
+	min	: 	min height in DEM
+
+    Options:
+	sizey	:	defaults to sizex
+    	ny	: 	defaults to nx 
+	
+    '''
+    from scipy import signal
+    ny = ny or nx
+    sizey = sizey or sizex
+    dem1 = np.random.rand(nx+2*sizex,ny+2*sizey)
+    demSmooth = signal.convolve(dem1,gaussianFilter(sizex,sizey),mode='valid')
+    demSmooth = (demSmooth - demSmooth.min())/(demSmooth.max() - demSmooth.min())
+    demSmooth = demSmooth*(max-min)+min
+    return demSmooth
+
+def plot(array,file=None):
+    '''
+    Produce a plot of the 2D array 
+
+    Options:
+	file	:	specify an output file
+    '''
+    import matplotlib.pylab as plt
+    plt.imshow(array,interpolation='nearest')
+    if file == None:
+        plt.show()
+    else:
+        plt.savefile(file)
+@ 
+
+
+This groups the jobs we have done in the previous exercise into three main functions, involving generating a Gaussian function in an array, generating the random DEM, and plotting. If we had properly planned what we were going to do, we would have identified these three functions as the core building blocks of our code. We would also have noted that generating the random DEM needs access to the Gaussian generating function. We have now included some comment text for each of these, so that we will remember what the functions do and how to use them (and other people looking at the code will know as well). We have also added some basic options to the functions, so that we can take sensible defaults if we wish.
+
+We can now run the sequence:
+
+<<fig = True, term=True, caption = 'Figure 1. Random DEM'>>=
+smoothDEM = randomDEM(300,20,100.,0.,sizey=5)
+plot(smoothDEM)
+@
+
+There are a few features to note about this new code. First, we notice that we define functions/,methods with a line starting ``def`` and ending with ``:``. All code that belongs in that method is then indented (this makes it 'neat' but it also a requirement of Python). We will generally write some text on the purpose and inputs/outputs of the method (in between ``'''`` over multiple lines if we wish).  We can also note the mechanism for optional arguments to the method (e.g. ``sizey=None``).
+
+Other than that, the code is very similar to what we previously wrote. One point of interest is the use of the logical statement ``or``. Consider::
+
+    def gaussianFilter(sizex,sizey=None,scale=0.333):
+        sizey = sizey or sizex
+
+``sizex`` here is required, so will always be set. ``sizey`` takes a default value of ``None``. If we don't set ``sizey`` it will be ``None`` then, and we can verify that::
+
+    >>> None or 'something else'
+    'something else'
+
+If however we do set ``sizey``, e.g. to ``10`` then::
+
+    >>>10 or 'something else'
+    10
+
+The mechanism would have worked the same if we had set the default value of ``sizey`` to ``false`` but you can check that for yourself.
+
+Raindrops keep falling on my DEM
+--------------------------------
+
+Now we have a few useful functions (that we might choose to re-use elsewhere) we can define some more operations for our DEM. One might be a simple raindrop code which is one way we can define watersheds from a DEM. You will find
+implementations of this in most GIS packages, but its a simple enough code to develop, quite fun to write, and we can demonstrate a few new things in scientific Python.
+
+The main idea of a raindrop program is to suppose that a raindrop falls on a cell of the DEM, to suppose that it flows downhill (obviously you could account for other effects if you wanted to) and to produce a map of where it ends up. This will give us a drainage network.
+
+A good description of the basic algorithm is given in some tutorial notes `on cellular automata <http://www.niu.edu/landform/nonlinearRules.htm>`_. It gives a useful schematic:
+
+.. figure:: images/nonlinearRules_clip_image006_0000.png
+
+although there is one error in the second and third figures (see if you can spot it).
+
+If we have some elevation data on a gid, then the basic tasks of this algorithm are to:
+
+* encode the flow direction (x and y) from consideration of the direction to the local minimum.
+* iteratively apply the flow direction to route water in the contributing area array.
+
+We assume that we have a DEM, from above (``smoothDEM``). We noted above that there are issues at the boundaries with spatial operators, so we might find it of value to define a 'buffering' code that places the DEM in the centre of a padded array, with unset values set arbitrarily (to the maxiumum value plus one here):
+
+<<fig = True>>=
+
+def padding(dem,size=1):
+    '''
+    Apply a border of size to a spatial dataset
+
+    Return the padded data with the original centred in the array
+    '''
+    out = np.zeros([dem.shape[0]+2*size,dem.shape[1]+2*size])
+    out[:,:] = np.max(dem)+1
+    out[size:-size,size:-size] = dem
+    return out
+
+padDEM = padding(smoothDEM)
+plot(padDEM)
+@
+
+Next, we need a local minimum operator. One implementation of this might be:
+
+<<fig = True>>=
+def localMin(dem):
+    '''
+    We wish to return the location of the minimum grid value
+    in a neighbourhood.
+
+    We assume the array is 2D and defined (y,x)
+  
+    We return wx,wy which are the cell displacements in x and y directions.
+
+    '''
+    wy = np.zeros_like(dem).astype(int)
+    wx = np.zeros_like(dem).astype(int)
+    winx = np.ones([3,3])
+    for i in xrange(3):
+        winx[:,i] = i - 1
+    winy = winx.transpose()
+    demp = padding(dem,size=1)
+    for y in np.arange(1,demp.shape[0]-1):
+        for x in np.arange(1,demp.shape[1]-1):
+            win = demp[y-1:y+2,x-1:x+2]
+            ww = np.where(win == np.min(win))
+            whereX = winx[ww][0]
+            whereY = winy[ww][0]
+            wy[y-1,x-1] = whereY
+            wx[y-1,x-1] = whereX
+    return wx,wy
+
+(wx,wy) = localMin(smoothDEM)
+plot(wx)
+@
+
+<<fig = True>>=
+plot(wy)
+
+print wx
+print wy
+@
+
+We can see that the arrays ``wy`` and ``wx`` contain values ranging from ``-1`` to ``1`` indicating the direction of downward flow.
+
+This is actually quite an *inefficient* piece of code, and you might well find that it can be more elegantly achieved using the slope and aspect information. That is left as an exercise for the interested student, but as a lesson in coding, the method ``localMin`` above is sufficient as it achieves its stated aims.
+
+Exercise
+--------
+
+Check that ``localMin`` operates correctly with the small DEM grid given above. 
+
+**Hint** all you really need to change is setting up the DEM, which you will have to do manually, e.g.::
+
+    >>> smoothDEM = np.array([[14,13,13,14,11],[11,12,14,13,10],[11,10,11,11,9],\
+    ...	        [8,9,11,10,8],[6,8,10,7,9]])
+
+You could also have a look at the ``pylab`` `example gallery <http://matplotlib.sourceforge.net/mpl_examples/pylab_examples/quiver_demo.py>`_ again, which shows you how you could plot the directions as arrows.
+
+Raindrop
+--------
+
+Now we have the basic set up, we can perhaps think more clearly about defining an algorithm for our raindrop program.
+
+raindrops on roses: pseudocode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Optimisation should never be your primary concern when developing a piece of code, but if you know you can think of some clever, clear, and robust way of doing something that you know would otherwise be very slow, it might be worth an attempt. Generally, especially when you are starting coding, keep it simple.
+If you really want to optimise, do that *once* you've got *everything* working.
+
+From what we have seen above, the critical information we want to calculate is the 'contributing area', which is total number of cells that contribute water to any other cell. We have a strong hint from above that this can be achieved by iteratively using a local operator that has information of where water from each cell is routed to. 
+
+We can start to develop some `pseudocode <http://en.wikipedia.org/wiki/Pseudocode>`_ to do this. This allows us to write the algorithm we want to implement in a structured way, akin to plain english. This should really be 
+independent of any computer language, as its the *algorithm* we are trying to define, but when you are working in a high level language such as Python, you might use elements of the language (once you are familiar with them). You might like to read some `guidelines <http://www.cs.cornell.edu/Courses/cs482/2003su/handouts/pseudocode.pdf>`_ on this, but you will find plenty of other general examples on the `web <http://www.google.co.uk/search?q=pseudocode&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a>`_.
+
+When you are trying to work out an algorithm, it is also very often a good idea to go through the steps you think you want *by hand* on a small dataset. The example above is very suitable for this:
+
+.. figure:: images/nonlinearRules_clip_image006_0000.png
+
+
+A good idea is to start from some idea of what *output* we want, then think about what *inputs* we need for this (we can refine this as our ideas develop if needs be) and then decide on the processes we need to go through to go from the inputs to the output. 
+
+Here, the *output* will be the accumulated contributing area. The core input will be a DEM, but we realise that we need flow direction as perhaps the first processing of this.
+
+The core of the algorithm is clearly going to be based around a choice of which cell we move to from the current cell. Everything else should just be iteratively applying this 'move'. Part of this 'move' will obviously also be a termination criterion, where we decide not to move any further. We can foresee that we might have to think about what happens to raindrops that fall off the edge of the DEM. These are all just 'concepts' we can form from thinking about and trying to visualise the problem, before we even start writing pseudocode.
+
+Even if the final place we want to end up is e.g. delineation of catchments, we are making sure our focus is on a particular, solveable, part of the problem, rather than trying to work out every detail of everything from the outset. This is key for coding: break the problem down into a hierarchy of problems.
+
+So ...::
+
+# input: DEM
+# floating point array of altitude of size (ny,nx)
+
+1. Calculate flow direction 
+Input: DEM float(ny,nx)
+Output: dx,dy integer arrays (nx,ny)
+For each cell of the DEM, calculate the local coordinate to which water will flow.
+Here, that is given by the local coordinate from the current cell to the lowest 
+cell in the 8-neighbourhood. 
+Notes: The values should range (-1:1)
+
+2. declare an array: rain : float(ny,nx)
+and set values to 1.
+This will hold the source rain data.
+
+3. declare an array: rain2 : float(ny,nx)
+and set values to 0. This will hold the information on where
+the rain goes to on each iteration.
+
+3. declare an array: accum : float(ny,nx)
+and set values to 0. This will accumulate the data from rain2 and form the
+output of the code.
+
+4. loop until no change in the array rain from one iteration to the next:
+
+ 4.1 for each cell (y,x) where rain[y,x] is not zero:
+
+  4.1.1 thisDx = dx[y,x]
+	thisDy = dy[y,x]
+  4.1.2 if both thisDx and thisDy are not zero:
+  	    transport rain from rain[y,x] to rain2[thisDy+y,thisDx+x]
+  4.1.3 set rain[y,x] to zero.
+
+ 4.2 sum rain2 into accum
+ 4.3 set rain to rain2 for use in next iteration
+ 4.4 Check termination criterion: is rain the same as it was previously?
+
+5. Add 1 to everywhere in the accumulator, for 'self source'.
+
+6. Output accum
+
+
+That is quite a detailed piece of pseudocode, though it could probably benefit from some more details on the algorithm. At the very least, it should be sufficient for you to try a 'dry run' using the small example above, and also implement this algorithm in python.
+
+Exercise
+--------
+
+Implement in Python the raindrop algorithm described above and show a plot of the resulting contributing area.
+
+Make use of 'dry runs' to make sure you understand the algorithm. Make sure you understand the psedocode above (or better still, write your own) before proceeding to the code.
+
+An answer to this problem is given at the bottom of the page, but looking straight at that will not help you learn how to use computers!
+
+Slope and Aspect
+----------------
+
+Some codes to calculate slope and aspect that might be of interest in manipulating and using DEMs.
+
+<<>>=
+
+def grad2d(dem):
+    '''
+    Calculate the slope and gradient of a DEM
+    '''
+    from scipy import signal
+    f0 = gaussianFilter(3)
+    I = signal.convolve(dem,f0,mode='valid')
+    f1 = np.array([[-1,0,1],[-2,0,2],[-1,0,1]])
+    f2 = f1.transpose()
+    g1 = signal.convolve(I,f1,mode='valid')
+    g2 = signal.convolve(I,f2,mode='valid')
+    slope = np.sqrt(g1**2 + g2**2)
+    aspect = np.arctan2(g2,g1)
+    return slope, aspect
+@
+
+We can run this and plot the slope:
+
+<<fig = True, term=True, caption = 'Figure 2. Slope'>>=
+slope,  aspect = grad2d(smoothDEM)
+plot(slope)
+@
+
+and aspect:
+
+<<fig = True, term=True, caption = 'Figure 3. Aspect'>>=
+plot(aspect)
+@
+
+Some new features here:
+
+- we have returned two arrays from the function (``slope, aspect``). This is done using a comma separated list.
+- we set up the simple `Sobel <http://en.wikipedia.org/wiki/Sobel_operator>`_ filters 'by hand' as they are simple (``[[-1,0,1],[-2,0,2],[-1,0,1]]``) in a list.
+- we then converted this list to a numpy array using ``np.array``.
+- rather than having to define the second filter ``f2`` by hand, we generate it as the `transpose <http://mathworld.wolfram.com/Transpose.html>`_ of ``f1`` using ``np.transpose()``.
+- we make use of several other numpy methods that we would expect to find (``np.sqrt()`` and ``np.arctan2()``) in a numerical library/package.
+
+
+
+A raindrop code
+---------------
+
+Assuming we have the function ``localMin(dem)`` and the function ``randomDEM()`` also defined above, `here <http://www2.geog.ucl.ac.uk/~plewis/geogg122/source/raindrops.py>`_ is some code that will suffice for this problem, but your own code should be much more thoroughly commented:
+
+.. figure:: images/accumd.png
+
+.. figure:: images/accum.png
+
+
+The contrast on the accumulation plot may not be very informative, so we can modify this for display purposes:
+
+.. figure:: images/accum2.png
+

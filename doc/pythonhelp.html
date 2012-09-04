@@ -1,0 +1,139 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11. Some help information for setting up and using Python &mdash; GeogG122 v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GeogG122 v1.0 documentation" href="index.html" />
+    <link rel="prev" title="10. Help and related Material" href="helper.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="helper.html" title="10. Help and related Material"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="some-help-information-for-setting-up-and-using-python">
+<h1>11. Some help information for setting up and using Python<a class="headerlink" href="#some-help-information-for-setting-up-and-using-python" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="where-to-get-python">
+<h2>11.1. Where to get Python<a class="headerlink" href="#where-to-get-python" title="Permalink to this headline">¶</a></h2>
+<p>We have several Python distributions on the Geography Unix machines, including an <a class="reference external" href="http://www.enthought.com/products/edudownload.php">EPD distribution</a> that you can very easily download and install on your own computer, if you have one. Most operatng systems will in any case come with a Python distribution, and you can most likely make direct use of this without using EPD. In any case, you can have multiple python distributions on the same computer if you wish.</p>
+</div>
+<div class="section" id="getting-new-packages">
+<h2>11.2. Getting new Packages<a class="headerlink" href="#getting-new-packages" title="Permalink to this headline">¶</a></h2>
+<p>For most Python distributions, you will be able to use <a class="reference external" href="http://pypi.python.org/pypi/setuptools">easy_install</a> to easily install (!) new packages and update your distribution. For the earlier sessions in this course, the only packages that you need (that are normally included with basic Python distributions) are numpy, matplotlib, and scipy. One convenient way to use python is through <a class="reference external" href="http://ipython.org/">ipython</a>. To check that you have access to this, open a Unix shell (or other interfaces on non Unix machines) and type:</p>
+<div class="highlight-python"><pre>berlin% which ipython
+/opt/epd-7.1-2-rh5-x86_64/bin/ipython</pre>
+</div>
+<p>If the response is:</p>
+<div class="highlight-python"><pre>berlin% which ipython
+ipython: Command not found.</pre>
+</div>
+<p>then either it is not installed on your computer or it is not in your <em>path</em>. On the UCL Geography machines, it is probably in <tt class="docutils literal"><span class="pre">/opt/epd-7.1-2-rh5-x86_64/bin/ipython``_.</span> <span class="pre">If</span> <span class="pre">you</span> <span class="pre">are</span> <span class="pre">working</span> <span class="pre">on</span> <span class="pre">this</span> <span class="pre">system,</span> <span class="pre">check</span> <span class="pre">that</span> <span class="pre">this</span> <span class="pre">file</span> <span class="pre">exists</span> <span class="pre">(``ls</span> <span class="pre">-l</span> <span class="pre">/opt/epd-7.1-2-rh5-x86_64/bin/ipython</span></tt>). You <em>can</em> just type:</p>
+<div class="highlight-python"><pre>berlin% /opt/epd-7.1-2-rh5-x86_64/bin/ipython</pre>
+</div>
+<p>to start your interactive Python session in this case, but it is probably better to put this in your path. To do that (and <em>only</em> if <tt class="docutils literal"><span class="pre">which</span> <span class="pre">ipython</span></tt> returned <tt class="docutils literal"><span class="pre">Command</span> <span class="pre">not</span> <span class="pre">found</span></tt>) edit the file <tt class="docutils literal"><span class="pre">~/.cshrc</span></tt> (if you are using <tt class="docutils literal"><span class="pre">tcsh</span></tt> as your shell, or e.g. <tt class="docutils literal"><span class="pre">~/.bashrc</span></tt> if you are using <tt class="docutils literal"><span class="pre">bash</span></tt>) and toweards the end of the file, include the following lines:</p>
+<div class="highlight-python"><pre>set path = ($path /opt/epd-7.1-2-rh5-x86_64/bin)</pre>
+</div>
+<p>If you are using <tt class="docutils literal"><span class="pre">bash</span></tt> or another shell, include the appropriate commands to set the shell variable <tt class="docutils literal"><span class="pre">path</span></tt> (and/or the environment variable <tt class="docutils literal"><span class="pre">PATH</span></tt>). In the shell, then type (for <tt class="docutils literal"><span class="pre">tcsh</span></tt>):</p>
+<div class="highlight-python"><pre>berlin% source ~/.cshrc</pre>
+</div>
+<p>to update your path. Typing <tt class="docutils literal"><span class="pre">which</span> <span class="pre">ipython</span></tt> should now give the result we want.</p>
+<p>If you don&#8217;t have <tt class="docutils literal"><span class="pre">ipython</span></tt> on your system, but you do have <tt class="docutils literal"><span class="pre">easy_install</span></tt> (check with <tt class="docutils literal"><span class="pre">which</span> <span class="pre">easy_install</span></tt>, it will nortrmally be in the same place that <tt class="docutils literal"><span class="pre">ipython</span></tt> would be) you can use this to install <tt class="docutils literal"><span class="pre">ipython</span></tt>. You will normally do this as <tt class="docutils literal"><span class="pre">root</span></tt> (the super user, or administrator) if you are using your own computer. On the Geography system, you have to ask Chris Knell if you need any new software, though you will find that you can install packages locally (i.e. just for yourself) if you really need them and noone else is likely to do so. If you have your own linux or OS X computer and you need to install <tt class="docutils literal"><span class="pre">ipython</span></tt> type:</p>
+<div class="highlight-python"><pre>home% sudo easy_install ipython</pre>
+</div>
+<p>which will prompt you for the root (system/ administrator) password and then install the package. This is the same for any other package you need, so to check you have appropriate <tt class="docutils literal"><span class="pre">numpy</span></tt>, <tt class="docutils literal"><span class="pre">matplotlib</span></tt> and <tt class="docutils literal"><span class="pre">scipy</span></tt>:</p>
+<div class="highlight-python"><pre>home% sudo easy_install numpy matplotlib scipy</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">11. Some help information for setting up and using Python</a><ul>
+<li><a class="reference internal" href="#where-to-get-python">11.1. Where to get Python</a></li>
+<li><a class="reference internal" href="#getting-new-packages">11.2. Getting new Packages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="helper.html"
+                        title="previous chapter">10. Help and related Material</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/pythonhelp.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="helper.html" title="10. Help and related Material"
+             >previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Prof. P. Lewis, Prof. J. French.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

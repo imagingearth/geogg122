@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. Introduction to programming in Python &mdash; GeogG122 v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GeogG122 v1.0 documentation" href="index.html" />
+    <link rel="next" title="6. Writing and Debugging Python Code" href="python102.html" />
+    <link rel="prev" title="4. Some more Unix and associated tools" href="unix_two.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="python102.html" title="6. Writing and Debugging Python Code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unix_two.html" title="4. Some more Unix and associated tools"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction-to-programming-in-python">
+<h1>5. Introduction to programming in Python<a class="headerlink" href="#introduction-to-programming-in-python" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="python">
+<h2>5.1. Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h2>
+<p>Python is a high-level programming language that is suitable for a range of tasks in scientific computing.
+Relevant features include:
+- it is automatically compiled and executed
+- code is <em>portable</em> provided you have the appropriate Python modules.
+- for compute intensive tasks, you can easily make calls to methods written in (faster) lower-level languages such as C or FORTRAN
+- there is an active user and development community, which means that new capabilities appear over time and there are many existing extensions and enhancements easily available to you.</p>
+<p>We have provided <a class="reference external" href="pythonhelp.html">some instructions</a> that should help you set up your own Python installation on your own computer if you need or want to, but you will also easily find information on the web. You will also find other introductory (and more advanced) materials on the web (e.g. <a class="reference external" href="http://wiki.python.org/moin/BeginnersGuide">this beginners guide</a>). Other useful resources include:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.python.org/doc/">Python documentation</a></li>
+<li><a class="reference external" href="http://www.python.org/">The Python home Web site</a></li>
+<li><a class="reference external" href="http://www.python.org/doc/FAQ.html">Python FAQ</a></li>
+</ul>
+</div>
+<div class="section" id="in-this-session">
+<h2>5.2. In this session<a class="headerlink" href="#in-this-session" title="Permalink to this headline">¶</a></h2>
+<p>In this part of the session, we will cover:</p>
+<p>[<a class="reference internal" href="#boolean">boolean</a>] [<a class="reference internal" href="#dict">dict</a>] [<a class="reference internal" href="#files">files</a>] [<a class="reference internal" href="#float">float</a>] [<a class="reference internal" href="#for">for</a>] [<a class="reference internal" href="#integer">integer</a>] [<a class="reference internal" href="#ipython">ipython</a>] [<a class="reference internal" href="#lists">lists</a>] [<a class="reference internal" href="#modulo">modulo</a>] [<a class="reference internal" href="#print">print</a>] [<a class="reference internal" href="#range">range</a>] [<a class="reference internal" href="#strings">strings</a>] [<a class="reference internal" href="#type">type</a>] [<a class="reference internal" href="#variables">variables</a>] [<a class="reference internal" href="#xrange">xrange</a>]</p>
+<p>which is a good deal of the main Python builtin types. You can find more detailed information on this <a class="reference external" href="http://docs.python.org/library/stdtypes.html">from docs.python.org</a>.</p>
+</div>
+<div class="section" id="getting-started">
+<h2>5.3. Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p id="ipython">We will start by using an interactive Python session using <tt class="docutils literal"><span class="pre">ipython</span></tt>. You may already have personal preferences in this matter, and may well wish to use <a class="reference external" href="http://docs.python.org/library/idle.html">IDLE</a> (Python&#8217;s Integrated DeveLopment Environment) or some other python shell/environment. It is up to you, but we will assume the use of <tt class="docutils literal"><span class="pre">ipython</span></tt> from a Unix shell here.</p>
+<p>You should start up <tt class="docutils literal"><span class="pre">ipython</span></tt>, e.g. from Unix by typing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">berlin</span><span class="o">%</span> <span class="n">ipython</span>
+</pre></div>
+</div>
+<p>which should result in the prompt:</p>
+<div class="highlight-python"><pre>In [1]:</pre>
+</div>
+<p>You can now type Python &#8216;commands&#8217; at the prompt which will be executed when you hit return. If you just use the standard Python interface (i.e. just typing <tt class="docutils literal"><span class="pre">python</span></tt>), the prompt will be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>so we will use this to indicate the prompt. Actually, not every command is executed when you hit return, as sometimes we need to use multiple lines. In this case, the prompt will be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>in <tt class="docutils literal"><span class="pre">ipython</span></tt> or:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+</pre></div>
+</div>
+<p>in <tt class="docutils literal"><span class="pre">python</span></tt>. We will use <tt class="docutils literal"><span class="pre">`...</span></tt> in these notes to indicate the line continuation prompt. Obviously, you should not actually type in the prompt parts in these examples.</p>
+<p>To exit from the <tt class="docutils literal"><span class="pre">ipython</span></tt> session, type <tt class="docutils literal"><span class="pre">^D</span></tt> (CNTRL and D), the standard end of file (EOF) marker.</p>
+</div>
+<div class="section" id="string-data-type">
+<span id="strings"></span><h2>5.4. String data type<a class="headerlink" href="#string-data-type" title="Permalink to this headline">¶</a></h2>
+<p>Datatypes are ways that we represent information in the language we are using. Really these are just particular types of classes. One core example is the <tt class="docutils literal"><span class="pre">string</span></tt> datatype, which we can create within single <cite>&#8216;</cite> or double <cite>&#8220;</cite> quotes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;hello world&#39;</span>
+<span class="go">&#39;hello world&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;hello again&quot;</span>
+<span class="go">&#39;hello again&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="sd">&#39;&#39;&#39; A string</span>
+<span class="gp">... </span><span class="sd">that goes over multiple lines.</span>
+<span class="gp">... </span><span class="sd">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<p id="variables">An important concept in programming is the <cite>variable</cite>. This is the basic way in which we can &#8216;store&#8217; information for later manipulation and use. You set the &#8216;contents&#8217; of a variable using an equals <tt class="docutils literal"><span class="pre">=</span></tt> symbol, as you might expect in most languages:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span> <span class="o">=</span> <span class="s">&#39;hello world&#39;</span>
+</pre></div>
+</div>
+<p id="print">Here, we could use the method <tt class="docutils literal"><span class="pre">print</span></tt> to explicitly print the value of the string that we have assigned to the variable <tt class="docutils literal"><span class="pre">hw</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">hw</span>
+<span class="go">hello world</span>
+</pre></div>
+</div>
+<p>A method is something that we can apply to a variable, which will typically do something with it, in this case, print out its value.
+The string datatype has a number of &#8216;built in&#8217; methods that can be used to manipulate string data. Full information on this can be found by typing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which will give you detailed information on what you can do with a string. Python documentation is also available online, e.g. at <a class="reference external" href="http://www.python.org/doc/current/lib/string-methods.html">www.python.org</a>.</p>
+<p>We can combine strings with the <tt class="docutils literal"><span class="pre">+</span></tt> operator, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="o">=</span>  <span class="s">&#39;hello&#39;</span> <span class="o">+</span> <span class="s">&#39;world&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">this</span>
+<span class="go">helloworld</span>
+</pre></div>
+</div>
+<p>You will have noticed from this that no space is added automatically, so you might prefer:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;hello&#39;</span> <span class="o">+</span> <span class="s">&#39; world&#39;</span>
+<span class="go">hello world</span>
+</pre></div>
+</div>
+<p>Another way of generating strings is to use a formatting statement, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;This is the </span><span class="si">%s</span><span class="s"> code </span><span class="si">%s</span><span class="s"> ever wrote&#39;</span><span class="o">%</span><span class="p">(</span><span class="s">&#39;first&#39;</span><span class="p">,</span><span class="s">&#39;I&#39;</span><span class="p">)</span>
+<span class="go">This is the first code I ever wrote</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">%s</span></tt> symbol here stands for &#8216;string&#8217; and expects a string argument after it (in the brackets, after the <tt class="docutils literal"><span class="pre">%</span></tt> symbol). Importantly, we could have used variables here and inserted their values into the string:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">whichOne</span> <span class="o">=</span> <span class="s">&#39;first&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mySelf</span> <span class="o">=</span> <span class="s">&#39;I&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;This is the </span><span class="si">%s</span><span class="s"> code </span><span class="si">%s</span><span class="s"> ever wrote&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">whichOne</span><span class="p">,</span><span class="n">mySelf</span><span class="p">)</span>
+<span class="go">This is the first code I ever wrote</span>
+</pre></div>
+</div>
+<p>Some examples of methods for strings then:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span> <span class="o">=</span> <span class="s">&#39;hello world&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&#39;l&#39;</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;l&#39;</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;lo&#39;</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;world&#39;</span><span class="p">,</span><span class="s">&#39;everyone&#39;</span><span class="p">)</span>
+<span class="go">&#39;hello everyone&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hw</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="go">[&#39;hello&#39;, &#39;world&#39;]</span>
+</pre></div>
+</div>
+<p id="lists">This last one is an interesting example, because it takes a string and splits it into a list. By default the splitting is done on whitespace, but this can be whatever you like, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;1,2,3,4&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+<span class="go">[&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>5.5. Lists<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p id="type">A list is an important data type as it allows us to group together objects of the same or different types. If we want to confirm what the datatype of something is, we can use the method <tt class="docutils literal"><span class="pre">type</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="s">&#39;1 2 3&#39;</span><span class="p">)</span>
+<span class="go">str</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="s">&#39;1 2 3&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+<span class="go">list</span>
+</pre></div>
+</div>
+<p>We can form a list using square brackets <tt class="docutils literal"><span class="pre">[]</span></tt>, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">thisList</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;3&#39;</span><span class="p">,</span> <span class="s">&#39;4&#39;</span><span class="p">,</span> <span class="s">&#39;5&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">thisList</span><span class="p">)</span>
+<span class="go">list</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">thisList</span>
+<span class="go">[1, 2, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">thisList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">thisList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">&lt;type &#39;int&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">thisList</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">[1, 2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">thisList</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">[1,&#39;3&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">thisList</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">thisList</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">[1,2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">thisList</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+<span class="go">[&#39;3&#39;, &#39;4&#39;, &#39;5&#39;]</span>
+</pre></div>
+</div>
+<p>From these examples, we learn several things about lists.</p>
+<ul class="simple">
+<li>First, we can express a list with square brackets containing comma separated values.</li>
+<li>We can refer to an element in the list using square brackets on the list variable (e.g. <tt class="docutils literal"><span class="pre">thisList[0]</span></tt>).</li>
+<li>We note that the counting system is 0-based, i.e. the <em>first</em> value in a list is <tt class="docutils literal"><span class="pre">thisList[0]</span></tt> (<strong>not</strong> <tt class="docutils literal"><span class="pre">thisList[1]</span></tt> as it would be in a one-based language)</li>
+<li>We can refer to list indices counting from the <em>end</em> of the list using negative numbers (so <tt class="docutils literal"><span class="pre">thisList[-1]</span></tt> is the last element in the list, <tt class="docutils literal"><span class="pre">thisList[-2]</span></tt> is the second to last etc.)</li>
+<li>We can refer to a range of values in a list using a colon <tt class="docutils literal"><span class="pre">:</span></tt> separator, e.g. <tt class="docutils literal"><span class="pre">thisList[0:2]</span></tt> is list elements 0 to 2 in steps of 1 (N.B. not including the last value, so it means &#8216;from 0 up to but not including 2 in steps of 1&#8217;). The example <tt class="docutils literal"><span class="pre">thisList[0:4:2]</span></tt> involves steps of 2, clearly.</li>
+<li>In list ranges, the start, end or step can be implicit (as in <tt class="docutils literal"><span class="pre">thisList[:-3]</span></tt> which is equivalent to <tt class="docutils literal"><span class="pre">thisList[0:-3:1]</span></tt>)</li>
+<li>A list data type can contain different data types: the first two elements in the list here are in fact integer number representations (<tt class="docutils literal"><span class="pre">type(thisList[0])</span> <span class="pre">==</span> <span class="pre">int</span></tt>) whereas the others are of data type string (<tt class="docutils literal"><span class="pre">str</span></tt>).</li>
+</ul>
+<p>You should generate your own list and make sure you appreciate these features of manipulating lists.</p>
+<p>A few useful operators (see <tt class="docutils literal"><span class="pre">help(list)</span></tt> for more details):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">,</span><span class="s">&#39;2&#39;</span><span class="p">,</span><span class="s">&#39;3&#39;</span><span class="p">,</span><span class="s">&#39;4&#39;</span><span class="p">,</span><span class="s">&#39;monsters&#39;</span><span class="p">,</span><span class="s">&#39;walking&#39;</span><span class="p">,</span><span class="s">&quot;&#39;cross&quot;</span><span class="p">,</span><span class="s">&#39;the&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;floor&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">list</span>
+<span class="go">[&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;monsters&#39;, &#39;walking&#39;, &quot;&#39;cross&quot;, &#39;the&#39;, &#39;floor&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="s">&quot;I love counting&quot;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;monsters&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s">&#39;penguins&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="go">&quot;&#39;cross&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s">&#39;by&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">&#39;floor&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s">&#39;door&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">1 2 3 4 penguins walking by the door</span>
+</pre></div>
+</div>
+<p>Note the use of <tt class="docutils literal"><span class="pre">&quot;</span></tt> to form a string where the string contains <tt class="docutils literal"><span class="pre">'`</span></tt> in <tt class="docutils literal"><span class="pre">&quot;'cross&quot;</span></tt>.
+Other than that, see if you can follow what the various list methods are doing to the string (you can print what is happening at each stage). The last statement <tt class="docutils literal"><span class="pre">print</span> <span class="pre">'</span> <span class="pre">'.join(list[:-3])</span></tt> is quite complex, but at heart it is using the string method <tt class="docutils literal"><span class="pre">join()</span></tt> on the string <tt class="docutils literal"><span class="pre">'</span> <span class="pre">'</span></tt>, which is really just the opposite of the string <tt class="docutils literal"><span class="pre">split()</span></tt> operation we saw above. It happens to be a convenient way to produce a string from a list of strings (provided they all <em>are</em> strings).</p>
+</div>
+<div class="section" id="integers">
+<span id="integer"></span><h2>5.6. Integers<a class="headerlink" href="#integers" title="Permalink to this headline">¶</a></h2>
+<p>We briefly came across the integer data type above. It is important to appreciate the difference between a string representation, e.g. <tt class="docutils literal"><span class="pre">'1'</span></tt> and a numerical representation such as an integer <tt class="docutils literal"><span class="pre">1</span></tt>. In essence, we can do numerical operations on the latter, but not the former. A good example of this is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;1&#39;</span> <span class="o">+</span> <span class="s">&#39;1&#39;</span>
+<span class="go">&#39;11&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>The first makes use of <tt class="docutils literal"><span class="pre">+</span></tt> to concatenate two strings, and results in the string <tt class="docutils literal"><span class="pre">11</span></tt>. The second uses the <tt class="docutils literal"><span class="pre">+</span></tt> operator to perform the numerical operation &#8216;plus&#8217; to the two integer numbers. Integer arithmetic proceeds as you would expect it to, but you should note that the result of numerical operations on integers is another integer, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">/</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">**</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">/=</span> <span class="mi">9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">i</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">i</span><span class="o">/</span><span class="mi">2</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p id="modulo">So, 3/2 in integer type is 1. This is clearly involving rounding down. The remainder from such arithmetic can be found with the modulo operator (if needed):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="mi">14</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">14</span><span class="o">%</span><span class="mi">3</span>
+<span class="go">4 2</span>
+</pre></div>
+</div>
+<p>which tells us that 14 is 4 * 3 + 2.</p>
+<p>We can include integers in string formatting with a <tt class="docutils literal"><span class="pre">%d</span></tt> symbol:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;The answer is </span><span class="si">%d</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="go">The answer is 42</span>
+</pre></div>
+</div>
+<p>We could also have converted the integer to a string representation using <tt class="docutils literal"><span class="pre">str()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;The answer is still </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="go">The answer is still 42</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="floating-point-numbers">
+<span id="float"></span><h2>5.7. Floating Point Numbers<a class="headerlink" href="#floating-point-numbers" title="Permalink to this headline">¶</a></h2>
+<p>A more general numerical number representation is &#8216;floating point&#8217; or &#8216;float&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="mf">1.7</span><span class="p">)</span>
+<span class="go">float</span>
+</pre></div>
+</div>
+<p>The same numerical operators can be applied to floating point numbers as we used for integers. Unless we deliberately want to work with inters, we will probably most often work with floating point representation when describing data, as when we have a measurement of some quantity we would normally want:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="mf">3.0</span><span class="o">/</span><span class="mi">2</span>
+<span class="go">1.5</span>
+</pre></div>
+</div>
+<p>rather than <tt class="docutils literal"><span class="pre">1</span></tt> as above. The downsides of floating point representation are:</p>
+<ul class="simple">
+<li>the cost of storage is generally higher (more bytes for representation)</li>
+<li>the representation is not always exact, as the data type has a limited number of bits to <a class="reference external" href="http://steve.hollasch.net/cgindex/coding/ieeefloat.html">store the representation in</a>.</li>
+</ul>
+<p>This latter point can lead to unexpected behaviour for coding newbies:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">1e10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mf">1e-20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="go">10000000000.0</span>
+</pre></div>
+</div>
+<p>so we have &#8216;lost&#8217; the <cite>1e-20</cite> (<cite>1.0 x 10^-20</cite>) here due to the limitations of the number representation.</p>
+<p>Try:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="mf">1e10</span> <span class="o">+</span> <span class="mf">1e-5</span>
+<span class="go">10000000000.00001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mf">1e10</span> <span class="o">+</span> <span class="mf">1e-6</span>
+<span class="go">10000000000.000002</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mf">1e10</span> <span class="o">+</span> <span class="mf">1e-7</span>
+<span class="go">10000000000.0</span>
+</pre></div>
+</div>
+<p>We can include floating point numbers in string formatting with a <cite>%f</cite> symbol. We can expand this by using e.g. <cite>%21.10f</cite> to represent a string conversion of a floating point number with 21 digits (including the decimal point) and 10 decimal places, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;</span><span class="si">%21.10f</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="mf">1e10</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
+<span class="go">&#39;10000000000.0000019073&#39;</span>
+</pre></div>
+</div>
+<p>which is not quite the <tt class="docutils literal"><span class="pre">10000000000.000001</span></tt> that we had in mind. This can cause problems when comparing numbers, so you should generally try to avoid or at least think carefully about the order of operatiopns involving very big and very small numbers. These errors due to representation are called &#8216;rounding errors&#8217;. See <a class="reference external" href="http://docs.python.org/tutorial/floatingpoint.html">docs.python.org</a> for more information on this.</p>
+</div>
+<div class="section" id="dictionaries">
+<span id="dict"></span><h2>5.8. Dictionaries<a class="headerlink" href="#dictionaries" title="Permalink to this headline">¶</a></h2>
+<p>Another important data type is the dictionary (dict) class. This is actually core to much of Python. It is in some ways similar to a list, but its elements are stored in arbitrary order and are accessed via &#8216;keys&#8217;. An example is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;foo&#39;</span><span class="p">:</span><span class="s">&#39;bar&#39;</span><span class="p">,</span><span class="s">&#39;x&#39;</span><span class="p">:</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="s">&#39;hello&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">this</span>
+<span class="go">{&#39;x&#39;: 100, &#39;foo&#39;: &#39;bar&#39;, 1: &#39;hello&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">this</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">hello</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">this</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">]</span>
+<span class="go">100</span>
+</pre></div>
+</div>
+<p>As we can see, if we print all of <tt class="docutils literal"><span class="pre">this</span></tt> it can be in an arbitrary order. We can also see that the keys can be of different data types (integers and strings so far here) as can the values associated with each key.</p>
+<p>We can add new elements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">this</span><span class="p">[</span><span class="mf">1.1</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;a float&#39;</span>
+</pre></div>
+</div>
+<p>where we add a key which is a float type here (the keys can be any <a class="reference external" href="http://docs.python.org/glossary.html">hashable</a> type).</p>
+<p>We can have a hierarchy of dictionaries, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">that</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;first&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s">&#39;second&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">this</span><span class="p">[</span><span class="s">&#39;sub&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">that</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">this</span><span class="p">[</span><span class="s">&#39;sub&#39;</span><span class="p">][</span><span class="s">&#39;first&#39;</span><span class="p">]</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>We can get a list of keys or a list of values:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">that</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;first&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s">&#39;second&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">that</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;second&#39;, &#39;first&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">that</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="go">[2, 1]</span>
+</pre></div>
+</div>
+<p>Dictionaries are very useful for a large number of things in Python, but it will suffice to have introduced them here for now.
+See <tt class="docutils literal"><span class="pre">help(dict)</span></tt> for more details on methods for dictionaries.</p>
+</div>
+<div class="section" id="boolean-data-type">
+<span id="boolean"></span><h2>5.9. Boolean data type<a class="headerlink" href="#boolean-data-type" title="Permalink to this headline">¶</a></h2>
+<p>The Boolean data type is used for logical operations, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">that</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">this</span><span class="p">)</span>
+<span class="go">bool</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="ow">and</span> <span class="n">that</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="ow">or</span> <span class="n">that</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="ow">not</span> <span class="n">this</span> <span class="ow">or</span> <span class="n">that</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>These are just simple logical statements. Make sure you understand these basic operations, as we will use logic considerably later.</p>
+</div>
+<div class="section" id="file-input-and-output">
+<span id="files"></span><h2>5.10. File input and output<a class="headerlink" href="#file-input-and-output" title="Permalink to this headline">¶</a></h2>
+<p>One common thing we want to do in programming is to read from or write to files in <a class="reference external" href="http://en.wikipedia.org/wiki/ASCII">ASCII</a> format. This is simple to do in a high level language such as Python. First, let&#8217;s generate a dataset that we want to write out:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">,</span><span class="mf">5.</span><span class="p">],[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">4.</span><span class="p">,</span><span class="mf">9.</span><span class="p">,</span><span class="mf">16.</span><span class="p">,</span><span class="mf">25.</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">data</span>
+<span class="go">[[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 4.0, 9.0, 16.0, 25.0]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>This is a slightly different list to the ones we&#8217;ve seen above. It is a 2-dimensional array that we have created by nesting lists. We also see the <tt class="docutils literal"><span class="pre">len()</span></tt> method which reports the length of a list (or similar data types) in its outer dimension (2 here). <tt class="docutils literal"><span class="pre">data[0]</span></tt> then is of length 5.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span> <span class="o">=</span> <span class="nb">file</span><span class="p">(</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+<span class="gp">... </span>    <span class="n">outfile</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The file we have created, <tt class="docutils literal"><span class="pre">tmp.dat</span></tt> should contain:</p>
+<div class="highlight-python"><pre>1.000000 1.000000
+2.000000 4.000000
+3.000000 9.000000
+4.000000 16.000000
+5.000000 25.000000</pre>
+</div>
+<p>We have introduced a few new concepts here. First, we notice how we can open a file <em>for writing</em>: <tt class="docutils literal"><span class="pre">outfile</span> <span class="pre">=</span> <span class="pre">file('tmp.dat',&quot;w&quot;)</span></tt>. The variable <tt class="docutils literal"><span class="pre">outfile</span></tt> is set to the information we get from calling the <tt class="docutils literal"><span class="pre">file()</span></tt> method (see <tt class="docutils literal"><span class="pre">help(file)</span></tt>).</p>
+<p id="range"><span id="for"></span>Second, we have made use of a <tt class="docutils literal"><span class="pre">for</span></tt> loop to iterate over the elements in the variable <tt class="docutils literal"><span class="pre">data</span></tt>.</p>
+<p>The method <tt class="docutils literal"><span class="pre">range(len(data[0]))</span></tt> returns the list <tt class="docutils literal"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4]</span></tt>, so we could have written:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+<span class="gp">... </span>   <span class="n">outfile</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p id="xrange">In fact, for looping of this sort, we would normally use <tt class="docutils literal"><span class="pre">xrange</span></tt>, an iterable object that doesn&#8217;t have to explicitly form the list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+<span class="gp">... </span>    <span class="n">outfile</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Thinking about the list produced by <tt class="docutils literal"><span class="pre">range</span></tt> is however easier to start with. What happens in the <tt class="docutils literal"><span class="pre">for</span></tt> loop then is that the variable <tt class="docutils literal"><span class="pre">i</span></tt> takes the value of each item in the list, sequentially, so the first time we are in the loop, <tt class="docutils literal"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">0</span></tt>, and we are writing the elements of the list <tt class="docutils literal"><span class="pre">data</span></tt>, <tt class="docutils literal"><span class="pre">data[0][0]</span></tt> and <tt class="docutils literal"><span class="pre">data[1][0]</span></tt>.</p>
+<p>The <tt class="docutils literal"><span class="pre">\n</span></tt> character in the format statement is new to us as well. This stands for &#8216;newline&#8217;, so that after <tt class="docutils literal"><span class="pre">data[0][0]</span></tt> and <tt class="docutils literal"><span class="pre">data[1][0]</span></tt> are written as string representations of their floating point numbers, a &#8216;newline&#8217; character is written to the file.</p>
+<p>The line <tt class="docutils literal"><span class="pre">outfile.close()</span></tt> closes the file, flushing any data in buffers whilst doing so.</p>
+<p>One important feature of this snippet of code is that it shows how in Python, indentation (4 spaces here) must be used to define elements within any iteration / control structure.</p>
+<p>Let us now consider how to read data from such a file. This is similar to above:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">indata</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>but we can read all data at the same time with the <tt class="docutils literal"><span class="pre">file</span></tt> method <tt class="docutils literal"><span class="pre">readlines()</span></tt>. We could have done this in more steps as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">infile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indata</span> <span class="o">=</span> <span class="n">infile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If we now look at what has been read in, we will see:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">infile</span>
+<span class="go">[&#39;1.000000 1.000000\n&#39;, &#39;2.000000 4.000000\n&#39;, &#39;3.000000 9.000000\n&#39;, &#39;4.000000 16.000000\n&#39;, &#39;5.000000 25.000000\n&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>The list <tt class="docutils literal"><span class="pre">infile</span></tt> then has 5 elements, the first of which is <tt class="docutils literal"><span class="pre">'1.000000</span> <span class="pre">1.000000\n'</span></tt>. Note that it has a newline character in the end and that it is a string. File input and output of this sort all takes place as strings.</p>
+<p>We can split this up into a list 5 x 2 elements using e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">indata</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;tmp.dat&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indata</span><span class="p">)):</span>
+<span class="gp">... </span>    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This is quite instructive. We know how many elements there are in the dataset from the number of lines we read from the file (<tt class="docutils literal"><span class="pre">len(indata)</span></tt>) and we can just loop over these, split the string we have for each line, then append it to the list (noting that we set the original list to <tt class="docutils literal"><span class="pre">[]</span></tt>, and empty list).</p>
+<p>But the data would still be strings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">data</span>
+<span class="go">[[&#39;1.000000&#39;, &#39;1.000000&#39;],</span>
+<span class="go"> [&#39;2.000000&#39;, &#39;4.000000&#39;],</span>
+<span class="go"> [&#39;3.000000&#39;, &#39;9.000000&#39;],</span>
+<span class="go"> [&#39;4.000000&#39;, &#39;16.000000&#39;],</span>
+<span class="go"> [&#39;5.000000&#39;, &#39;25.000000&#39;]]</span>
+</pre></div>
+</div>
+<p>which is probably not what we want, and is in any case the &#8216;wrong way around&#8217; compared to our original data representation.</p>
+<p>At the heart of what we need, is to convert a string data type to a float. We do this with the method <tt class="docutils literal"><span class="pre">float()</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indata</span><span class="p">)):</span>
+<span class="gp">... </span>    <span class="n">linedata</span> <span class="o">=</span> <span class="n">indata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">linedata</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">linedata</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">,</span><span class="n">values</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">data</span>
+<span class="go">[[1.0, 2.0, 3.0, 4.0, 5.0], [1.0, 4.0, 9.0, 16.0, 25.0]]</span>
+</pre></div>
+</div>
+<p>This is more what we are after, although the code we have written is not very flexible (it will only work if there are 2 columsn of data).</p>
+</div>
+<div class="section" id="summary">
+<h2>5.11. Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>In this session, we have been introduced to some basic concepts in Python. These are mainly associated with some basic operations on the inbuilt Python data types, but we have also come across control using a <tt class="docutils literal"><span class="pre">for</span></tt> loop and the fact that Python code is indented in such cases.</p>
+<blockquote>
+<div>[<a class="reference internal" href="#boolean">boolean</a>] [<a class="reference internal" href="#dict">dict</a>] [<a class="reference internal" href="#files">files</a>] [<a class="reference internal" href="#float">float</a>] [<a class="reference internal" href="#for">for</a>] [<a class="reference internal" href="#integer">integer</a>] [<a class="reference internal" href="#ipython">ipython</a>] [<a class="reference internal" href="#lists">lists</a>] [<a class="reference internal" href="#modulo">modulo</a>] [<a class="reference internal" href="#print">print</a>] [<a class="reference internal" href="#range">range</a>] [<a class="reference internal" href="#strings">strings</a>] [<a class="reference internal" href="#type">type</a>] [<a class="reference internal" href="#variables">variables</a>] [<a class="reference internal" href="#xrange">xrange</a>]</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. Introduction to programming in Python</a><ul>
+<li><a class="reference internal" href="#python">5.1. Python</a></li>
+<li><a class="reference internal" href="#in-this-session">5.2. In this session</a></li>
+<li><a class="reference internal" href="#getting-started">5.3. Getting started</a></li>
+<li><a class="reference internal" href="#string-data-type">5.4. String data type</a></li>
+<li><a class="reference internal" href="#id1">5.5. Lists</a></li>
+<li><a class="reference internal" href="#integers">5.6. Integers</a></li>
+<li><a class="reference internal" href="#floating-point-numbers">5.7. Floating Point Numbers</a></li>
+<li><a class="reference internal" href="#dictionaries">5.8. Dictionaries</a></li>
+<li><a class="reference internal" href="#boolean-data-type">5.9. Boolean data type</a></li>
+<li><a class="reference internal" href="#file-input-and-output">5.10. File input and output</a></li>
+<li><a class="reference internal" href="#summary">5.11. Summary</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unix_two.html"
+                        title="previous chapter">4. Some more Unix and associated tools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="python102.html"
+                        title="next chapter">6. Writing and Debugging Python Code</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/python101.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="python102.html" title="6. Writing and Debugging Python Code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unix_two.html" title="4. Some more Unix and associated tools"
+             >previous</a> |</li>
+        <li><a href="index.html">GeogG122 v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Prof. P. Lewis, Prof. J. French.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

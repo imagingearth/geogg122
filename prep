@@ -1,0 +1,3 @@
+#!/bin/csh -f
+Pweave -d images/dem1 dem1.Pnw
+Pweave -d images/dem2 dem2.Pnw

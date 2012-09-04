@@ -1,0 +1,257 @@
+Random Digital Elevation Model
+==============================
+
+Introduction
+------------
+
+Here we will write a simple Python code to generate a 2D random correlated field which we will use to represent a DEM.
+We will also demonstrate some features of ``numpy``, ``scipy`` and ``matplotlib``, and demonstrate spatial convolution in Python.
+
+In particular:
+
+  [`np.random.rand`_] [`plt.imshow`_] [`plt.show`_] [`matplotlib.pylab`_] [`np.mgrid`_] [`np.exp`_] [`np.shape`_] [`np.size`_] [`scipy.signal`_] [`scipy.signal.convolve`_] [`add_subplot`_] [`contour`_] [`plot`_] [`plt.figure`_] [`mpl_toolkits`_] [`mplot3d`_] [`axes3d`_] [`view_init`_] [`plot_wireframe`_] [`draw`_]
+
+.. _np.random.rand:
+
+Random DEM
+----------
+
+::
+
+  #!/usr/bin/env python
+  import numpy as np
+  nx = 360
+  ny = 360
+  dem1 = np.random.rand(nx,ny)
+
+
+
+We first import the numpy package but for convenience give it the local name ``np`` (``import numpy as np``). Next we set up two variables that we will use to represent the dimensions of the array (``nx`` and ``ny``). We then use the ``random.rand()`` method in numpy to generate the 2D random array. 
+
+This is a bit big to use ``print`` with (though you could try), so we need some way of visualising it. We can do this using ``pylab``:
+
+.. _plt.imshow:
+.. _plt.show:
+.. _matplotlib.pylab:
+
+::
+
+  import matplotlib.pylab as plt
+  plt.imshow(dem1)
+  plt.show()
+
+
+.. figure:: images/dem1Fig1.png
+   :width: 15 cm
+
+   Figure 1. Random DEM
+
+
+Filter
+------
+
+Next, we will 'smooth' the dataset with a convolution filter to induce correlation. To do this we must first generate a filter. For smoothing, we might choose a Gaussian filter, so we will need to apply a `Gaussian function <ihttp://mathworld.wolfram.com/GaussianFunction.html>`_ in 2D. To make this interesting, we will have a filter which is different dimensions in x and y:
+
+.. _np.mgrid:
+.. _np.exp:
+
+::
+
+  sizex = 30
+  sizey = 10
+  x, y = np.mgrid[-sizex:sizex+1, -sizey:sizey+1]
+  g = np.exp(-0.333*(x**2/float(sizex)+y**2/float(sizey)))
+  filter = g/g.sum()
+
+
+
+`Here, np.mgrid <http://docs.scipy.org/doc/numpy/reference/generated/numpy.mgrid.html>`_ (see ``help(np.mgrid)``) generates an N-dimensional grid of *indices* in the ``numpy`` arrays ``x`` and ``y``:
+
+.. _np.shape:
+.. _np.size:
+
+
+  >>> print type(x)
+  <type 'numpy.ndarray'>
+  >>> print x.shape
+  (61, 21)
+  >>> print x.size
+  1281
+  >>> print x
+  [[-30 -30 -30 ..., -30 -30 -30]
+   [-29 -29 -29 ..., -29 -29 -29]
+   [-28 -28 -28 ..., -28 -28 -28]
+   ..., 
+   [ 28  28  28 ...,  28  28  28]
+   [ 29  29  29 ...,  29  29  29]
+   [ 30  30  30 ...,  30  30  30]]
+  >>> print y
+  [[-10  -9  -8 ...,   8   9  10]
+   [-10  -9  -8 ...,   8   9  10]
+   [-10  -9  -8 ...,   8   9  10]
+   ..., 
+   [-10  -9  -8 ...,   8   9  10]
+   [-10  -9  -8 ...,   8   9  10]
+   [-10  -9  -8 ...,   8   9  10]]
+
+
+
+We have introduced a few useful methods here for examining numpy arrays. `Here, np.shape <http://docs.scipy.org/doc/numpy/reference/generated/numpy.ma.shape.html>`_ gives a `tuple <http://docs.python.org/release/1.5.1p1/tut/tuples.html>`_ giving the dimensions of the array ``x`` (similarly ``y`` of course). You should note that the range of numbers given in ``np.mgrid`` is *inclusive*, so the numbers here go from -30 to +30 (thence 61 entries). `We use np.size <http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.size.html>`_ to give the total number of elements in the array. We can also note how the ``print`` method works with printing arrays that are a bit big to show.
+
+The `method np.exp <http://docs.scipy.org/doc/numpy/reference/generated/numpy.exp.html>`_ applies an exponential function to the arrays (N.B. ``x`` and ``y`` need to have the same shape to do this, otherwise you couldn't add them together with ``x**2/float(sizex)+y**2/float(sizey)``). This is a nice example of one of the features of using numpy: we can apply functions (methods) to *arrays*, so we do not have to loop over the array and apply it to each element. This makes for clearer code, but is also generally more efficient. The Gaussian function we have generated is scaled by 0.333 to avoid having too many zero values in the convolution array (spatial convolution in this way is quite expensive computationally) but there are dangers of `ringing <http://en.wikipedia.org/wiki/Ringing_%28signal%29>`_ if you cut the filter off too soon and leave sharp transitions more generally).
+
+Finally in the code snippet, we normalise the Gaussian function so that it has an integral of unity. The method `np.sum() <ihttp://docs.scipy.org/doc/numpy/reference/generated/numpy.sum.html>`_ gives the sum of the elements in the array, so dividing by this will normalise the function.
+
+We can visualise the filter we have generated:
+
+::
+
+  plt.imshow(filter)
+  plt.show()
+
+
+.. figure:: images/dem1Fig2.png
+   :width: 15 cm
+
+   Figure 2. Gaussian filter
+
+
+Convolution
+-----------
+
+Now, we have a spatial dataset and a filter, so we want to `convolve <http://docs.gimp.org/en/plug-in-convmatrix.html>`_ one with the other. We can use the method convolve `in scipy.signal <http://docs.scipy.org/doc/scipy/reference/signal.html>`_:
+
+.. _scipy.signal:
+.. _scipy.signal.convolve:
+
+::
+
+  from scipy import signal
+  demSmooth = signal.convolve(dem1,filter,mode='valid')
+  # rescale so it lies between 0 and 1
+  demSmooth = (demSmooth - demSmooth.min())/(demSmooth.max() - demSmooth.min())
+
+
+
+We might now check the size of the output:
+
+
+  >>> print dem1.shape
+  (360, 360)
+  >>> print demSmooth.shape
+  (300, 340)
+
+
+
+and visualise it with:
+
+::
+
+  plt.imshow(demSmooth)
+  plt.show()
+
+
+.. figure:: images/dem1Fig3.png
+   :width: 15 cm
+
+   Figure 3. Correlated Random DEM
+
+
+We note that when we printed the size of the final 'smooth' DEM it was smaller. Use the help pages for ``scipy.signal.convolve`` and your understanding of convolution to appreciate why this is so and what the options might have been.
+
+This random correlated field is now something that we could use to approximate a DEM. It has generally linear features running North-South because of the shape of the filter we applied, but other than that, plenty of little hills and valleys. Correlated random fields are useful for many applications, but here, we just want a pseudoDEM.
+
+more Plotting
+-------------
+
+You should explore `matplotlib <http://matplotlib.sourceforge.net/>`_ and perhaps particularly the `gallery <http://matplotlib.sourceforge.net/gallery.html>`_ to begin with to work out how to produce some neater plots than the ones we have generated here.
+
+We will however show a few quick examples:
+
+First, some contours:
+
+.. _add_subplot:
+.. _contour:
+
+::
+
+  X,Y = np.mgrid[0:demSmooth.shape[0],0:demSmooth.shape[1]]
+  X += sizex
+  Y += sizey
+  fig = plt.figure()
+  ax = fig.add_subplot(111)
+  ax.contour(X,Y,demSmooth)
+  plt.show()
+
+
+.. figure:: images/dem1Fig4.png
+   :width: 15 cm
+
+   Figure 4. Contours
+
+
+Next, a slice through the DEM, showing the original data as well:
+
+.. _plot:
+
+::
+
+  fig = plt.figure()
+  ax = fig.add_subplot(111)
+  demsub = dem1[sizex:-sizex,sizey:-sizey]
+  ax.plot(X[:,X.shape[0]/2],demsub[:,X.shape[0]/2],'b^')
+  ax.plot(X[:,X.shape[0]/2],demSmooth[:,X.shape[0]/2],'r')
+  plt.show()
+
+
+.. figure:: images/dem1Fig5.png
+   :width: 15 cm
+
+   Figure 5. Slice
+
+
+Incidentally in this example, we show how to generate a subset of the data, generating ``demsub`` to match ``demSmooth``.
+
+Finally, a 3D grid plot that might be good for visualising terrain:
+
+.. _plt.figure:
+.. _mpl_toolkits:
+.. _mplot3d:
+.. _axes3d:
+.. _view_init:
+.. _plot_wireframe:
+.. _draw:
+
+::
+
+  from mpl_toolkits.mplot3d import axes3d
+  fig = plt.figure()
+  ax = axes3d.Axes3D(fig)
+  ax.view_init(-141.,60.)
+  ax.plot_wireframe(X, Y,demSmooth,cstride=10,rstride=10)
+  #plt.draw()
+  plt.show()
+
+
+.. figure:: images/dem1Fig6.png
+   :width: 15 cm
+
+   Figure 6. 3D wireframe
+
+
+If you uncomment the ``plt.draw()`` line, you will be able to interact with the plot.
+
+
+
+For more sophisticated 3D plotting, see `mayavi <http://code.enthought.com/projects/mayavi/>`_.
+
+
+Generation of this page
+-----------------------
+The code for this page is in `dem1.py <dem1.py>`_.
+
+As an interesting aside, you might be interested to know that this tutorail page was generated using a tool called `Pweave <http://mpastell.com/pweave/index.html>`_ which executes the Python code examples here (and generates graphs etc.) as it forms the html (or pdf etc.) page you see here. It would be interesting for you to generate your coursework submissions using this, if you are prepared to put a little extra learning in. The main feature of this is a Python package called `Sphinx <http://sphinx.pocoo.org/>`_. If you are using your own computer, you can readily install these with::
+
+    berlin% sudo easy_install -U Sphinx Pweave
+
+The pweave text for this page is `here <../../source/dem1.Pnw>`_ and the `restructured text generated by pweave here <../../source/dem1.rst>`_.
